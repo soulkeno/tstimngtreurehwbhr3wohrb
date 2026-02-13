@@ -4,8 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
+import { Check } from 'lucide-react';
 import type { Profile } from '@/pages/Dashboard';
 
 interface Props {
@@ -22,8 +22,81 @@ const uploadFile = async (bucket: string, userId: string, file: File) => {
   return publicUrl;
 };
 
+const NAME_EFFECTS = [
+  { value: 'none', label: 'None', preview: 'text-foreground' },
+  { value: 'glow', label: 'Glow', preview: 'glow-text text-foreground' },
+  { value: 'typewriter', label: 'Typewriter', preview: 'text-foreground' },
+  { value: 'rainbow', label: 'Rainbow', preview: 'rainbow-text' },
+  { value: 'butterflies', label: 'Butterflies', preview: 'text-foreground' },
+];
+
+const DESC_EFFECTS = [
+  { value: 'none', label: 'None', preview: 'text-muted-foreground' },
+  { value: 'glow', label: 'Glow', preview: 'glow-text text-muted-foreground' },
+  { value: 'typewriter', label: 'Typewriter', preview: 'text-muted-foreground' },
+  { value: 'rainbow', label: 'Rainbow', preview: 'rainbow-text' },
+];
+
+const BG_EFFECTS = [
+  { value: 'none', label: 'None' },
+  { value: 'blur', label: 'Blur' },
+  { value: 'snowflakes', label: 'Snowflakes' },
+  { value: 'rain', label: 'Rain' },
+];
+
+const CURSOR_EFFECTS = [
+  { value: 'none', label: 'None' },
+  { value: 'snow', label: 'Snow Trail' },
+];
+
+function EffectGrid({
+  label,
+  options,
+  value,
+  onChange,
+  previewText,
+}: {
+  label: string;
+  options: { value: string; label: string; preview?: string }[];
+  value: string;
+  onChange: (v: string) => void;
+  previewText?: string;
+}) {
+  return (
+    <div className="space-y-3">
+      <Label className="text-sm font-medium">{label}</Label>
+      <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+        {options.map((opt) => (
+          <button
+            key={opt.value}
+            onClick={() => onChange(opt.value)}
+            className={`relative rounded-lg border-2 p-3 text-center transition-all text-sm ${
+              value === opt.value
+                ? 'border-primary bg-primary/10'
+                : 'border-border bg-secondary hover:border-muted-foreground'
+            }`}
+          >
+            {previewText && opt.preview ? (
+              <span className={`text-xs font-medium ${opt.preview}`}>{previewText}</span>
+            ) : (
+              <span className="text-xs font-medium text-foreground">{opt.label}</span>
+            )}
+            <p className="text-[10px] text-muted-foreground mt-1">{opt.label}</p>
+            {value === opt.value && (
+              <div className="absolute -top-1 -right-1 w-4 h-4 bg-primary rounded-full flex items-center justify-center">
+                <Check className="w-3 h-3 text-primary-foreground" />
+              </div>
+            )}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function DesignTab({ profile, onUpdate }: Props) {
   const [displayNameEffect, setDisplayNameEffect] = useState(profile.display_name_effect);
+  const [descriptionEffect, setDescriptionEffect] = useState(profile.description_effect || 'none');
   const [backgroundEffect, setBackgroundEffect] = useState(profile.background_effect);
   const [cursorEffect, setCursorEffect] = useState(profile.cursor_effect);
   const [saving, setSaving] = useState(false);
@@ -48,6 +121,7 @@ export function DesignTab({ profile, onUpdate }: Props) {
     setSaving(true);
     const { error } = await supabase.from('profiles').update({
       display_name_effect: displayNameEffect,
+      description_effect: descriptionEffect,
       background_effect: backgroundEffect,
       cursor_effect: cursorEffect,
     }).eq('id', profile.id);
@@ -85,43 +159,36 @@ export function DesignTab({ profile, onUpdate }: Props) {
         </CardContent>
       </Card>
 
-      {/* Effects */}
+      {/* Effects picker */}
       <Card className="glass-card border-border">
         <CardHeader><CardTitle>Visual Effects</CardTitle></CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label>Display Name Effect</Label>
-            <Select value={displayNameEffect} onValueChange={setDisplayNameEffect}>
-              <SelectTrigger className="bg-secondary border-border"><SelectValue /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="none">None</SelectItem>
-                <SelectItem value="glow">Simple Glow</SelectItem>
-                <SelectItem value="butterflies">Butterflies</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="space-y-2">
-            <Label>Background Effect</Label>
-            <Select value={backgroundEffect} onValueChange={setBackgroundEffect}>
-              <SelectTrigger className="bg-secondary border-border"><SelectValue /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="none">None</SelectItem>
-                <SelectItem value="blur">Blur</SelectItem>
-                <SelectItem value="snowflakes">Snowflakes</SelectItem>
-                <SelectItem value="rain">Rain</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="space-y-2">
-            <Label>Cursor Effect</Label>
-            <Select value={cursorEffect} onValueChange={setCursorEffect}>
-              <SelectTrigger className="bg-secondary border-border"><SelectValue /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="none">None</SelectItem>
-                <SelectItem value="snow">Snow Trail</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+        <CardContent className="space-y-6">
+          <EffectGrid
+            label="Display Name Effect"
+            options={NAME_EFFECTS}
+            value={displayNameEffect}
+            onChange={setDisplayNameEffect}
+            previewText={profile.display_name || 'Name'}
+          />
+          <EffectGrid
+            label="Description Effect"
+            options={DESC_EFFECTS}
+            value={descriptionEffect}
+            onChange={setDescriptionEffect}
+            previewText="description"
+          />
+          <EffectGrid
+            label="Background Effect"
+            options={BG_EFFECTS}
+            value={backgroundEffect}
+            onChange={setBackgroundEffect}
+          />
+          <EffectGrid
+            label="Cursor Effect"
+            options={CURSOR_EFFECTS}
+            value={cursorEffect}
+            onChange={setCursorEffect}
+          />
           <Button onClick={saveEffects} disabled={saving}>
             {saving ? 'Saving...' : 'Save effects'}
           </Button>

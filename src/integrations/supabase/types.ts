@@ -111,6 +111,7 @@ export type Database = {
           cursor_effect: string
           custom_cursor_url: string | null
           description: string | null
+          description_effect: string
           discord_user_id: string | null
           display_name: string
           display_name_effect: string
@@ -130,6 +131,7 @@ export type Database = {
           cursor_effect?: string
           custom_cursor_url?: string | null
           description?: string | null
+          description_effect?: string
           discord_user_id?: string | null
           display_name?: string
           display_name_effect?: string
@@ -149,6 +151,7 @@ export type Database = {
           cursor_effect?: string
           custom_cursor_url?: string | null
           description?: string | null
+          description_effect?: string
           discord_user_id?: string | null
           display_name?: string
           display_name_effect?: string
