@@ -4,10 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Sparkles, Link2, Palette, Shield } from 'lucide-react';
 
 const features = [
-  { icon: Link2, title: 'Custom Links', desc: 'All your socials in one beautiful page' },
-  { icon: Palette, title: 'Full Customization', desc: 'Particles, video backgrounds, custom cursors & more' },
-  { icon: Sparkles, title: 'Unique Badges', desc: 'Stand out with custom icon badges on your profile' },
-  { icon: Shield, title: 'Your Username, Your URL', desc: 'Claim your unique link: yoursite.com/you' },
+  { icon: Link2, title: 'One Link, Everything', desc: 'Drop all your socials, music, whatever — one page.' },
+  { icon: Palette, title: 'Make It Yours', desc: 'Snow, rain, video backgrounds, custom cursors. Go crazy.' },
+  { icon: Sparkles, title: 'Flex Your Badges', desc: 'Verified, VIP, OG — collect and show off icons on your profile.' },
+  { icon: Shield, title: 'Your Name, Your Link', desc: 'Grab kenos.lol/yourname before someone else does.' },
 ];
 
 export default function Landing() {
@@ -39,7 +39,7 @@ export default function Landing() {
       <header className="relative z-10">
         <nav className="flex items-center justify-between px-6 py-5 max-w-6xl mx-auto">
           <h2 className="text-xl font-bold text-foreground tracking-tight">
-            bio<span className="text-primary">.link</span>
+            kenos<span className="text-primary">.lol</span>
           </h2>
           <div className="flex gap-3">
             <Button variant="ghost" asChild className="hover-scale">
@@ -54,18 +54,18 @@ export default function Landing() {
         <section className="text-center px-6 pt-24 pb-36 max-w-3xl mx-auto">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 text-primary text-sm mb-8 animate-fade-in">
             <Sparkles className="w-4 h-4" />
-            Bio-Link Platform
+            kenos.lol
           </div>
           <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-foreground mb-6 leading-tight animate-fade-in">
-            Your digital identity,{' '}
-            <span className="text-primary glow-text">redefined</span>
+            your page,{' '}
+            <span className="text-primary glow-text">your rules</span>
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-xl mx-auto animate-fade-in" style={{ animationDelay: '0.1s' }}>
-            Build a stunning bio-link page with 3D effects, music, video backgrounds, custom badges, and more.
+            one link for everything. music, badges, effects, vibes. no boring templates.
           </p>
           <div className="flex items-center justify-center gap-4 animate-fade-in" style={{ animationDelay: '0.2s' }}>
             <Button size="lg" className="text-base px-8 py-6 btn-glow hover-scale" asChild>
-              <Link to="/signup">Claim your page →</Link>
+              <Link to="/signup">get started →</Link>
             </Button>
             <Button size="lg" variant="outline" className="text-base px-8 py-6 hover-scale" asChild>
               <Link to="/login">Sign in</Link>
@@ -95,7 +95,7 @@ export default function Landing() {
 
       {/* Footer */}
       <footer className="relative z-10 text-center py-10 text-muted-foreground text-sm border-t border-border">
-        © 2025 bio.link — All rights reserved
+        © 2025 kenos.lol — All rights reserved
       </footer>
     </div>
   );
