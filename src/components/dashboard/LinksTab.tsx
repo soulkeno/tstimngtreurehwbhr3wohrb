@@ -6,7 +6,21 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus, Trash2, Github, Mail, Globe, MessageCircle, Send, Youtube, Gamepad2, Twitter, Instagram, Music2 } from 'lucide-react';
+
+const PLATFORM_ICONS: Record<string, React.ReactNode> = {
+  discord: <MessageCircle className="w-4 h-4" />,
+  github: <Github className="w-4 h-4" />,
+  email: <Mail className="w-4 h-4" />,
+  telegram: <Send className="w-4 h-4" />,
+  website: <Globe className="w-4 h-4" />,
+  youtube: <Youtube className="w-4 h-4" />,
+  roblox: <Gamepad2 className="w-4 h-4" />,
+  twitter: <Twitter className="w-4 h-4" />,
+  instagram: <Instagram className="w-4 h-4" />,
+  tiktok: <Music2 className="w-4 h-4" />,
+  custom: <Globe className="w-4 h-4" />,
+};
 
 const PLATFORMS = [
   'youtube', 'discord', 'github', 'twitter', 'instagram',
@@ -76,10 +90,13 @@ export function LinksTab({ userId }: { userId: string }) {
         <div className="space-y-3">
           {links.map((link) => (
             <div key={link.id} className="flex items-center justify-between bg-secondary rounded-lg px-4 py-3">
-              <div>
+              <div className="flex items-center gap-2">
+                <span className="text-foreground">{PLATFORM_ICONS[link.platform] || <Globe className="w-4 h-4" />}</span>
+                <div>
                 <span className="text-sm font-medium text-foreground capitalize">{link.platform}</span>
                 {link.label && <span className="text-muted-foreground text-sm ml-2">— {link.label}</span>}
                 <p className="text-xs text-muted-foreground truncate max-w-xs">{link.url}</p>
+                </div>
               </div>
               <Button variant="ghost" size="icon" onClick={() => removeLink(link.id)}>
                 <Trash2 className="w-4 h-4 text-destructive" />

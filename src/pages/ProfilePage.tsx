@@ -174,23 +174,25 @@ export default function ProfilePage() {
         {/* Name + badges */}
         <div className="mb-1 relative" ref={nameRef}>
           {profile.display_name_effect === 'butterflies' && <ButterflyEffect targetRef={nameRef} />}
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-2">
             <h1
-              className={`text-3xl font-bold text-foreground ${
+              className={`text-3xl font-bold text-foreground leading-none ${
                 profile.display_name_effect === 'glow' ? 'glow-text' : ''
               }`}
             >
               {profile.display_name || profile.username}
             </h1>
-            {badges.map((b) => (
-              <img
-                key={b.badge_id}
-                src={b.badges.icon_url}
-                alt={b.badges.name}
-                title={b.badges.name}
-                className="w-5 h-5 object-contain inline-block"
-              />
-            ))}
+            <div className="flex items-center gap-1 shrink-0">
+              {badges.map((b) => (
+                <img
+                  key={b.badge_id}
+                  src={b.badges.icon_url}
+                  alt={b.badges.name}
+                  title={b.badges.name}
+                  className="w-5 h-5 object-contain"
+                />
+              ))}
+            </div>
           </div>
         </div>
 

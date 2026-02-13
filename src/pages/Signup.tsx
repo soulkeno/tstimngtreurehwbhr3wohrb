@@ -53,7 +53,7 @@ export default function Signup() {
             <div className="space-y-2">
               <Label htmlFor="username">Username</Label>
               <div className="flex items-center gap-2">
-                <span className="text-muted-foreground text-sm whitespace-nowrap">yoursite.com/</span>
+                <span className="text-muted-foreground text-sm whitespace-nowrap">kenos.lol/</span>
                 <Input
                   id="username"
                   placeholder="username"
