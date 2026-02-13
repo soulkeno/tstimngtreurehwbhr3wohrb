@@ -31,7 +31,7 @@ export function DesignTab({ profile, onUpdate }: Props) {
   const handleFileUpload = async (bucket: string, field: string, e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (file.size > 20_000_000) { toast.error('File must be under 20MB'); return; }
+    if (file.size > 100_000_000) { toast.error('File must be under 100MB'); return; }
 
     try {
       const url = await uploadFile(bucket, profile.user_id, file);
