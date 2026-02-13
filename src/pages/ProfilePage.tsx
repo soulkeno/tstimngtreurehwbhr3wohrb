@@ -196,7 +196,7 @@ export default function ProfilePage() {
         {/* Description */}
         {profile.description && (
           <div className="text-sm mb-4">
-            {renderTextEffect(profile.description, profile.description_effect, 'text-muted-foreground')}
+            {renderTextEffect(profile.description, profile.description_effect, 'text-muted-foreground', { loop: true })}
           </div>
         )}
 
