@@ -41,6 +41,10 @@ export default function Landing() {
         backgroundImage: 'linear-gradient(hsl(var(--foreground)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)',
         backgroundSize: '60px 60px',
       }} />
+      {/* Grid cursor glow */}
+      <div className="pointer-events-none fixed inset-0 z-[1] transition-opacity duration-200" style={{
+        background: 'radial-gradient(400px circle at var(--glow-x, 50%) var(--glow-y, 50%), hsl(var(--primary) / 0.07), transparent 60%)',
+      }} />
 
       {/* Hero */}
       <header className="relative z-10">

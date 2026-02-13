@@ -94,6 +94,9 @@ export default function Dashboard() {
         backgroundImage: 'linear-gradient(hsl(var(--foreground)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)',
         backgroundSize: '60px 60px',
       }} />
+      <div className="pointer-events-none fixed inset-0 z-[1] transition-opacity duration-200" style={{
+        background: 'radial-gradient(400px circle at var(--glow-x, 50%) var(--glow-y, 50%), hsl(var(--primary) / 0.07), transparent 60%)',
+      }} />
 
       <nav className="relative z-10 flex items-center justify-between px-6 py-4 border-b border-border max-w-5xl mx-auto">
         <h2 className="text-xl font-bold text-foreground tracking-tight">
