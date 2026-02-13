@@ -1,4 +1,4 @@
-import { Github, Mail, Globe, MessageCircle, Send } from 'lucide-react';
+import { Github, Mail, Globe, MessageCircle, Send, Youtube, Gamepad2, Twitter, Instagram, Music2 } from 'lucide-react';
 
 const PLATFORM_ICONS: Record<string, React.ReactNode> = {
   discord: <MessageCircle className="w-6 h-6" />,
@@ -6,6 +6,11 @@ const PLATFORM_ICONS: Record<string, React.ReactNode> = {
   email: <Mail className="w-6 h-6" />,
   telegram: <Send className="w-6 h-6" />,
   website: <Globe className="w-6 h-6" />,
+  youtube: <Youtube className="w-6 h-6" />,
+  roblox: <Gamepad2 className="w-6 h-6" />,
+  twitter: <Twitter className="w-6 h-6" />,
+  instagram: <Instagram className="w-6 h-6" />,
+  tiktok: <Music2 className="w-6 h-6" />,
 };
 
 interface Link {
@@ -27,7 +32,7 @@ export function SocialIcons({ links }: { links: Link[] }) {
             target="_blank"
             rel="noopener noreferrer"
             title={link.label || link.platform}
-            className="text-foreground hover:text-primary transition-colors"
+            className="text-foreground hover:text-primary transition-all duration-200 hover:scale-110"
           >
             {PLATFORM_ICONS[link.platform] || <Globe className="w-6 h-6" />}
           </a>

@@ -88,7 +88,7 @@ export default function ProfilePage() {
     const rect = cardRef.current.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
-    cardRef.current.style.transform = `perspective(1000px) rotateY(${x * 10}deg) rotateX(${-y * 10}deg) scale3d(1.02, 1.02, 1.02)`;
+    cardRef.current.style.transform = `perspective(800px) rotateY(${x * 20}deg) rotateX(${-y * 20}deg) scale3d(1.04, 1.04, 1.04)`;
   }, []);
 
   const handleMouseLeave = useCallback(() => {
@@ -172,24 +172,26 @@ export default function ProfilePage() {
         </div>
 
         {/* Name + badges */}
-        <div className="mb-1 flex items-center gap-2 flex-wrap relative" ref={nameRef}>
-          <h1
-            className={`text-3xl font-bold text-foreground ${
-              profile.display_name_effect === 'glow' ? 'glow-text' : ''
-            }`}
-          >
-            {profile.display_name || profile.username}
-          </h1>
+        <div className="mb-1 relative" ref={nameRef}>
           {profile.display_name_effect === 'butterflies' && <ButterflyEffect targetRef={nameRef} />}
-          {badges.map((b) => (
-            <img
-              key={b.badge_id}
-              src={b.badges.icon_url}
-              alt={b.badges.name}
-              title={b.badges.name}
-              className="w-5 h-5 object-contain"
-            />
-          ))}
+          <div className="flex items-center gap-2 flex-wrap">
+            <h1
+              className={`text-3xl font-bold text-foreground ${
+                profile.display_name_effect === 'glow' ? 'glow-text' : ''
+              }`}
+            >
+              {profile.display_name || profile.username}
+            </h1>
+            {badges.map((b) => (
+              <img
+                key={b.badge_id}
+                src={b.badges.icon_url}
+                alt={b.badges.name}
+                title={b.badges.name}
+                className="w-5 h-5 object-contain inline-block"
+              />
+            ))}
+          </div>
         </div>
 
         {/* Description */}

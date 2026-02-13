@@ -22,14 +22,18 @@ export function ButterflyEffect({ targetRef }: { targetRef: React.RefObject<HTML
     let animId: number;
     const butterflies: Butterfly[] = [];
 
-    const resize = () => {
+    const updateSize = () => {
       const rect = target.getBoundingClientRect();
-      canvas.width = rect.width + 60;
-      canvas.height = rect.height + 60;
-      canvas.style.left = `${rect.left - 30}px`;
-      canvas.style.top = `${rect.top - 30}px`;
+      // Make canvas cover area around the name element
+      const padding = 40;
+      canvas.width = rect.width + padding * 2;
+      canvas.height = rect.height + padding * 2;
+      canvas.style.width = `${canvas.width}px`;
+      canvas.style.height = `${canvas.height}px`;
+      canvas.style.left = `-${padding}px`;
+      canvas.style.top = `-${padding}px`;
     };
-    resize();
+    updateSize();
 
     for (let i = 0; i < 5; i++) {
       butterflies.push({
@@ -50,7 +54,7 @@ export function ButterflyEffect({ targetRef }: { targetRef: React.RefObject<HTML
         b.x += Math.cos(b.angle) * b.speed;
         b.y += Math.sin(b.angle) * b.speed;
 
-        // Wrap around
+        // Wrap around the canvas area
         if (b.x < -10) b.x = canvas.width + 10;
         if (b.x > canvas.width + 10) b.x = -10;
         if (b.y < -10) b.y = canvas.height + 10;
@@ -64,7 +68,6 @@ export function ButterflyEffect({ targetRef }: { targetRef: React.RefObject<HTML
         ctx.beginPath();
         ctx.ellipse(b.x + wing * 0.7, b.y, Math.abs(wing), b.size * 0.6, 0, 0, Math.PI * 2);
         ctx.fill();
-        // Body
         ctx.fillStyle = 'rgba(120,80,200,0.8)';
         ctx.beginPath();
         ctx.ellipse(b.x, b.y, 1.5, b.size * 0.4, 0, 0, Math.PI * 2);
@@ -80,8 +83,7 @@ export function ButterflyEffect({ targetRef }: { targetRef: React.RefObject<HTML
   return (
     <canvas
       ref={canvasRef}
-      className="fixed pointer-events-none z-10"
-      style={{ position: 'fixed' }}
+      className="absolute pointer-events-none z-10"
     />
   );
 }

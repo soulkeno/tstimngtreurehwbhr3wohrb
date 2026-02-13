@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
@@ -32,6 +32,18 @@ export default function Dashboard() {
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
   const [profile, setProfile] = useState<Profile | null>(null);
+  const glowRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (glowRef.current) {
+        glowRef.current.style.setProperty('--glow-x', `${e.clientX}px`);
+        glowRef.current.style.setProperty('--glow-y', `${e.clientY}px`);
+      }
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
 
   useEffect(() => {
     if (!loading && !user) navigate('/login');
@@ -68,24 +80,30 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <nav className="flex items-center justify-between px-6 py-4 border-b border-border max-w-5xl mx-auto">
+    <div ref={glowRef} className="min-h-screen bg-background relative cursor-glow-page">
+      <div className="cursor-glow pointer-events-none fixed inset-0 z-0" />
+      <div className="fixed inset-0 z-0 opacity-[0.03]" style={{
+        backgroundImage: 'linear-gradient(hsl(var(--foreground)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)',
+        backgroundSize: '60px 60px',
+      }} />
+
+      <nav className="relative z-10 flex items-center justify-between px-6 py-4 border-b border-border max-w-5xl mx-auto">
         <h2 className="text-xl font-bold text-foreground tracking-tight">
           bio<span className="text-primary">.link</span>
         </h2>
         <div className="flex items-center gap-3">
-          <Button variant="outline" size="sm" asChild>
+          <Button variant="outline" size="sm" asChild className="hover-scale">
             <a href={`/${profile.username}`} target="_blank" rel="noopener noreferrer">
               <ExternalLink className="w-4 h-4 mr-1" /> View page
             </a>
           </Button>
-          <Button variant="ghost" size="sm" onClick={() => signOut().then(() => navigate('/'))}>
+          <Button variant="ghost" size="sm" onClick={() => signOut().then(() => navigate('/'))} className="hover-scale">
             <LogOut className="w-4 h-4 mr-1" /> Log out
           </Button>
         </div>
       </nav>
 
-      <main className="max-w-3xl mx-auto px-6 py-8">
+      <main className="relative z-10 max-w-3xl mx-auto px-6 py-8">
         <h1 className="text-3xl font-bold text-foreground mb-1">Dashboard</h1>
         <p className="text-muted-foreground mb-6">Customize your bio-link page</p>
 
