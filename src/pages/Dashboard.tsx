@@ -34,12 +34,19 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const [profile, setProfile] = useState<Profile | null>(null);
   const glowRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (glowRef.current) {
         glowRef.current.style.setProperty('--glow-x', `${e.clientX}px`);
         glowRef.current.style.setProperty('--glow-y', `${e.clientY}px`);
+      }
+      if (gridRef.current) {
+        const cx = (e.clientX / window.innerWidth - 0.5) * 20;
+        const cy = (e.clientY / window.innerHeight - 0.5) * 20;
+        gridRef.current.style.transform = `perspective(600px) rotateX(${-cy}deg) rotateY(${cx}deg)`;
+        gridRef.current.style.backgroundPosition = `${cx * 2}px ${cy * 2}px`;
       }
     };
     window.addEventListener('mousemove', handleMouseMove);
@@ -83,7 +90,7 @@ export default function Dashboard() {
   return (
     <div ref={glowRef} className="min-h-screen bg-background relative cursor-glow-page">
       <div className="cursor-glow pointer-events-none fixed inset-0 z-0" />
-      <div className="fixed inset-0 z-0 opacity-[0.03]" style={{
+      <div ref={gridRef} className="fixed inset-[-20px] z-0 opacity-[0.04] transition-transform duration-200 ease-out" style={{
         backgroundImage: 'linear-gradient(hsl(var(--foreground)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)',
         backgroundSize: '60px 60px',
       }} />
