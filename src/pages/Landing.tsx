@@ -75,18 +75,21 @@ export default function Landing() {
 
       {/* Features */}
       <section className="relative z-10 px-6 py-24 max-w-5xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
           {features.map((f, i) => (
             <div
               key={f.title}
-              className="glass-card rounded-xl p-6 hover:border-primary/30 transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_30px_-5px_hsl(var(--primary)/0.15)] animate-fade-in"
+              className="relative rounded-xl border border-border bg-card/60 p-6 transition-all duration-300 hover:border-primary/40 animate-fade-in overflow-hidden group"
               style={{ animationDelay: `${0.1 * i}s` }}
             >
-              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
-                <f.icon className="w-6 h-6 text-primary" />
+              {/* Left glow accent */}
+              <div className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-primary/60 via-primary/20 to-transparent rounded-l-xl opacity-60 group-hover:opacity-100 transition-opacity" />
+
+              <div className="w-10 h-10 rounded-lg border border-primary/30 bg-primary/5 flex items-center justify-center mb-4">
+                <f.icon className="w-5 h-5 text-primary" />
               </div>
-              <h3 className="text-lg font-semibold text-foreground mb-2">{f.title}</h3>
-              <p className="text-muted-foreground text-sm">{f.desc}</p>
+              <h3 className="text-base font-semibold text-foreground mb-2">{f.title}</h3>
+              <p className="text-muted-foreground text-sm leading-relaxed">{f.desc}</p>
             </div>
           ))}
         </div>
