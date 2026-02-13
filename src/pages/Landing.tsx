@@ -38,22 +38,22 @@ export default function Landing() {
       {/* Hero */}
       <header className="relative z-10">
         <nav className="flex items-center justify-between px-6 py-5 max-w-6xl mx-auto">
-          <h2 className="text-xl font-bold text-foreground tracking-tight">
+          <h2 className="text-xl font-bold text-foreground tracking-tight animate-fade-in">
             kenos<span className="text-primary">.lol</span>
           </h2>
           <div className="flex gap-3">
-            <Button variant="ghost" asChild className="hover-scale">
+            <Button variant="ghost" asChild className="hover-scale transition-all duration-300 hover:text-primary">
               <Link to="/login">Log in</Link>
             </Button>
-            <Button asChild className="hover-scale btn-glow">
+            <Button asChild className="hover-scale btn-glow transition-all duration-300 hover:shadow-[0_0_30px_hsl(var(--primary)/0.5)]">
               <Link to="/signup">Sign up</Link>
             </Button>
           </div>
         </nav>
 
         <section className="text-center px-6 pt-24 pb-36 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 text-primary text-sm mb-8 animate-fade-in">
-            <Sparkles className="w-4 h-4" />
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 text-primary text-sm mb-8 animate-fade-in hover:bg-primary/10 hover:border-primary/50 transition-all duration-300 cursor-default">
+            <Sparkles className="w-4 h-4 animate-pulse" />
             kenos.lol
           </div>
           <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-foreground mb-6 leading-tight animate-fade-in">
@@ -63,10 +63,10 @@ export default function Landing() {
             free biolink service
           </p>
           <div className="flex items-center justify-center gap-4 animate-fade-in" style={{ animationDelay: '0.2s' }}>
-            <Button size="lg" className="text-base px-8 py-6 btn-glow hover-scale" asChild>
+            <Button size="lg" className="text-base px-8 py-6 btn-glow hover-scale transition-all duration-300 hover:shadow-[0_0_40px_hsl(var(--primary)/0.6)] active:scale-95" asChild>
               <Link to="/signup">get started →</Link>
             </Button>
-            <Button size="lg" variant="outline" className="text-base px-8 py-6 hover-scale" asChild>
+            <Button size="lg" variant="outline" className="text-base px-8 py-6 hover-scale transition-all duration-300 hover:border-primary/60 hover:text-primary active:scale-95" asChild>
               <Link to="/login">Sign in</Link>
             </Button>
           </div>
@@ -79,16 +79,16 @@ export default function Landing() {
           {features.map((f, i) => (
             <div
               key={f.title}
-              className="relative rounded-xl border border-border bg-card/60 p-6 transition-all duration-300 hover:border-primary/40 animate-fade-in overflow-hidden group"
+              className="relative rounded-xl border border-border bg-card/60 p-6 transition-all duration-300 hover:border-primary/40 hover:-translate-y-1 hover:shadow-[0_8px_30px_hsl(var(--primary)/0.15)] animate-fade-in overflow-hidden group"
               style={{ animationDelay: `${0.1 * i}s` }}
             >
               {/* Left glow accent */}
-              <div className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-primary/60 via-primary/20 to-transparent rounded-l-xl opacity-60 group-hover:opacity-100 transition-opacity" />
+              <div className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-primary/60 via-primary/20 to-transparent rounded-l-xl opacity-60 group-hover:opacity-100 transition-all duration-300" />
 
-              <div className="w-10 h-10 rounded-lg border border-primary/30 bg-primary/5 flex items-center justify-center mb-4">
-                <f.icon className="w-5 h-5 text-primary" />
+              <div className="w-10 h-10 rounded-lg border border-primary/30 bg-primary/5 flex items-center justify-center mb-4 group-hover:bg-primary/10 group-hover:border-primary/50 group-hover:scale-110 transition-all duration-300">
+                <f.icon className="w-5 h-5 text-primary group-hover:drop-shadow-[0_0_6px_hsl(var(--primary)/0.6)] transition-all duration-300" />
               </div>
-              <h3 className="text-base font-semibold text-foreground mb-2">{f.title}</h3>
+              <h3 className="text-base font-semibold text-foreground mb-2 group-hover:text-primary transition-colors duration-300">{f.title}</h3>
               <p className="text-muted-foreground text-sm leading-relaxed">{f.desc}</p>
             </div>
           ))}

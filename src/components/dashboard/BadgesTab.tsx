@@ -35,23 +35,55 @@ function renderPremadeIcon(name: string) {
 }
 
 export function BadgesTab({ userId }: { userId: string }) {
-  const [allBadges, setAllBadges] = useState<Badge[]>([]);
   const [activeBadgeIds, setActiveBadgeIds] = useState<Set<string>>(new Set());
+  const [activePremadeNames, setActivePremadeNames] = useState<Set<string>>(new Set());
+  const [customBadges, setCustomBadges] = useState<Badge[]>([]);
   const [uploading, setUploading] = useState(false);
-  const [creatingPremade, setCreatingPremade] = useState(false);
 
   const fetchData = async () => {
-    const [{ data: badges }, { data: userBadges }] = await Promise.all([
-      supabase.from('badges').select('*'),
-      supabase.from('user_badges').select('badge_id').eq('user_id', userId),
+    const [{ data: userBadges }, { data: allBadges }] = await Promise.all([
+      supabase.from('user_badges').select('badge_id, badges(name, icon_url, is_custom, created_by)').eq('user_id', userId),
+      supabase.from('badges').select('*').eq('created_by', userId).eq('is_custom', true),
     ]);
-    if (badges) setAllBadges(badges as Badge[]);
-    if (userBadges) setActiveBadgeIds(new Set(userBadges.map((b: any) => b.badge_id)));
+
+    if (userBadges) {
+      setActiveBadgeIds(new Set(userBadges.map((b: any) => b.badge_id)));
+      const premadeNames = new Set<string>();
+      userBadges.forEach((b: any) => {
+        if (b.badges && !b.badges.is_custom) premadeNames.add(b.badges.name);
+      });
+      setActivePremadeNames(premadeNames);
+    }
+    if (allBadges) setCustomBadges(allBadges as Badge[]);
   };
 
   useEffect(() => { fetchData(); }, [userId]);
 
-  const toggleBadge = async (badgeId: string) => {
+  const togglePremadeBadge = async (premade: typeof PREMADE_BADGES[0]) => {
+    if (activePremadeNames.has(premade.name)) {
+      // Turn off - find and remove the user_badge
+      const { data: badge } = await supabase.from('badges').select('id').eq('name', premade.name).eq('is_custom', false).maybeSingle();
+      if (badge) {
+        await supabase.from('user_badges').delete().eq('user_id', userId).eq('badge_id', badge.id);
+      }
+    } else {
+      // Turn on - ensure badge exists, then equip
+      let { data: badge } = await supabase.from('badges').select('id').eq('name', premade.name).eq('is_custom', false).maybeSingle();
+      if (!badge) {
+        const svgString = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="${premade.color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${getIconPath(premade.name)}</svg>`;
+        const dataUrl = `data:image/svg+xml;base64,${btoa(svgString)}`;
+        const { data: newBadge, error } = await supabase.from('badges').insert({
+          name: premade.name, icon_url: dataUrl, is_custom: false, created_by: userId,
+        }).select('id').single();
+        if (error) { toast.error('Failed to create badge'); return; }
+        badge = newBadge;
+      }
+      await supabase.from('user_badges').insert({ user_id: userId, badge_id: badge!.id, sort_order: activeBadgeIds.size });
+    }
+    fetchData();
+  };
+
+  const toggleCustomBadge = async (badgeId: string) => {
     if (activeBadgeIds.has(badgeId)) {
       await supabase.from('user_badges').delete().eq('user_id', userId).eq('badge_id', badgeId);
     } else {
@@ -66,29 +98,6 @@ export function BadgesTab({ userId }: { userId: string }) {
     await supabase.from('badges').delete().eq('id', badge.id);
     fetchData();
     toast.success('Badge deleted');
-  };
-
-  const createPremadeBadge = async (premade: typeof PREMADE_BADGES[0]) => {
-    setCreatingPremade(true);
-    // Create an SVG data URL for the premade badge
-    const Icon = premade.icon;
-    const svgString = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="${premade.color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${getIconPath(premade.name)}</svg>`;
-    const dataUrl = `data:image/svg+xml;base64,${btoa(svgString)}`;
-
-    const { error } = await supabase.from('badges').insert({
-      name: premade.name,
-      icon_url: dataUrl,
-      is_custom: false,
-      created_by: userId,
-    });
-    setCreatingPremade(false);
-    if (error) {
-      if (error.code === '23505') toast.error('Badge already exists');
-      else toast.error('Failed to create badge');
-    } else {
-      fetchData();
-      toast.success(`${premade.name} badge created!`);
-    }
   };
 
   const uploadBadge = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -118,63 +127,71 @@ export function BadgesTab({ userId }: { userId: string }) {
     e.target.value = '';
   };
 
-  const myBadges = allBadges.filter(b => b.created_by === userId);
-  const otherBadges = allBadges.filter(b => b.created_by !== userId);
-
   return (
     <div className="space-y-6">
-      {/* Premade badges */}
+      {/* Premade badges - toggle on/off */}
       <Card className="glass-card border-border">
         <CardHeader>
           <CardTitle>Premade Badges</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-muted-foreground mb-4">Click to add a premade badge to your collection.</p>
+          <p className="text-sm text-muted-foreground mb-4">Click to equip or unequip a badge.</p>
           <div className="grid grid-cols-4 sm:grid-cols-8 gap-3">
-            {PREMADE_BADGES.map((premade) => (
-              <button
-                key={premade.name}
-                onClick={() => createPremadeBadge(premade)}
-                disabled={creatingPremade}
-                className="flex flex-col items-center gap-1 p-2 rounded-lg border border-border bg-secondary hover:border-primary hover:bg-primary/5 transition-all"
-                title={premade.name}
-              >
-                {renderPremadeIcon(premade.name)}
-                <span className="text-[10px] text-muted-foreground">{premade.name}</span>
-              </button>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Active badges */}
-      <Card className="glass-card border-border">
-        <CardHeader>
-          <CardTitle>Your Badges</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <p className="text-sm text-muted-foreground">Select badges to display on your profile. Click again to remove.</p>
-
-          <div className="grid grid-cols-6 sm:grid-cols-8 gap-3">
-            {allBadges.map((badge) => (
-              <div key={badge.id} className="relative group">
+            {PREMADE_BADGES.map((premade) => {
+              const isActive = activePremadeNames.has(premade.name);
+              return (
                 <button
-                  onClick={() => toggleBadge(badge.id)}
-                  className={`relative w-10 h-10 rounded-lg border-2 flex items-center justify-center transition-all ${
-                    activeBadgeIds.has(badge.id)
+                  key={premade.name}
+                  onClick={() => togglePremadeBadge(premade)}
+                  className={`relative flex flex-col items-center gap-1 p-2 rounded-lg border transition-all ${
+                    isActive
                       ? 'border-primary bg-primary/10'
-                      : 'border-border bg-secondary hover:border-muted-foreground'
+                      : 'border-border bg-secondary hover:border-primary hover:bg-primary/5'
                   }`}
-                  title={badge.name}
+                  title={premade.name}
                 >
-                  <img src={badge.icon_url} alt={badge.name} className="w-6 h-6 object-contain" />
-                  {activeBadgeIds.has(badge.id) && (
+                  {renderPremadeIcon(premade.name)}
+                  <span className="text-[10px] text-muted-foreground">{premade.name}</span>
+                  {isActive && (
                     <div className="absolute -top-1 -right-1 w-4 h-4 bg-primary rounded-full flex items-center justify-center">
                       <Check className="w-3 h-3 text-primary-foreground" />
                     </div>
                   )}
                 </button>
-                {badge.created_by === userId && (
+              );
+            })}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Custom badges */}
+      <Card className="glass-card border-border">
+        <CardHeader>
+          <CardTitle>Your Custom Badges</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <p className="text-sm text-muted-foreground">Upload and manage your own badges. Only you can see these.</p>
+
+          {customBadges.length > 0 && (
+            <div className="grid grid-cols-6 sm:grid-cols-8 gap-3">
+              {customBadges.map((badge) => (
+                <div key={badge.id} className="relative group">
+                  <button
+                    onClick={() => toggleCustomBadge(badge.id)}
+                    className={`relative w-10 h-10 rounded-lg border-2 flex items-center justify-center transition-all ${
+                      activeBadgeIds.has(badge.id)
+                        ? 'border-primary bg-primary/10'
+                        : 'border-border bg-secondary hover:border-muted-foreground'
+                    }`}
+                    title={badge.name}
+                  >
+                    <img src={badge.icon_url} alt={badge.name} className="w-6 h-6 object-contain" />
+                    {activeBadgeIds.has(badge.id) && (
+                      <div className="absolute -top-1 -right-1 w-4 h-4 bg-primary rounded-full flex items-center justify-center">
+                        <Check className="w-3 h-3 text-primary-foreground" />
+                      </div>
+                    )}
+                  </button>
                   <button
                     onClick={() => deleteBadge(badge)}
                     className="absolute -bottom-1 -right-1 w-4 h-4 bg-destructive rounded-full items-center justify-center hidden group-hover:flex transition-all"
@@ -182,10 +199,10 @@ export function BadgesTab({ userId }: { userId: string }) {
                   >
                     <Trash2 className="w-2.5 h-2.5 text-destructive-foreground" />
                   </button>
-                )}
-              </div>
-            ))}
-          </div>
+                </div>
+              ))}
+            </div>
+          )}
 
           <div className="border-t border-border pt-4">
             <Label className="text-sm font-medium block mb-2">Upload custom badge</Label>
