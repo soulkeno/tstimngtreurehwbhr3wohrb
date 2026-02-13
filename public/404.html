@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <script>
-      // redirect all 404 routes back to root so React Router can handle it
-      window.location.replace("/");
+      // Preserve the path and redirect to index
+      var path = window.location.pathname;
+      window.location.replace("/?p=" + path);
     </script>
   </head>
   <body></body>
