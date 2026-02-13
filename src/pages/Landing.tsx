@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Sparkles, Link2, Palette, Shield } from 'lucide-react';
 
@@ -10,45 +11,81 @@ const features = [
 ];
 
 export default function Landing() {
+  const glowRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (glowRef.current) {
+        glowRef.current.style.setProperty('--glow-x', `${e.clientX}px`);
+        glowRef.current.style.setProperty('--glow-y', `${e.clientY}px`);
+      }
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
   return (
-    <div className="min-h-screen bg-background">
+    <div ref={glowRef} className="min-h-screen bg-background relative cursor-glow-page">
+      {/* Cursor glow */}
+      <div className="cursor-glow pointer-events-none fixed inset-0 z-0" />
+
+      {/* Grid overlay */}
+      <div className="fixed inset-0 z-0 opacity-[0.03]" style={{
+        backgroundImage: 'linear-gradient(hsl(var(--foreground)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)',
+        backgroundSize: '60px 60px',
+      }} />
+
       {/* Hero */}
-      <header className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/10 via-transparent to-transparent" />
-        <nav className="relative z-10 flex items-center justify-between px-6 py-5 max-w-6xl mx-auto">
+      <header className="relative z-10">
+        <nav className="flex items-center justify-between px-6 py-5 max-w-6xl mx-auto">
           <h2 className="text-xl font-bold text-foreground tracking-tight">
             bio<span className="text-primary">.link</span>
           </h2>
           <div className="flex gap-3">
-            <Button variant="ghost" asChild>
+            <Button variant="ghost" asChild className="hover-scale">
               <Link to="/login">Log in</Link>
             </Button>
-            <Button asChild>
+            <Button asChild className="hover-scale btn-glow">
               <Link to="/signup">Sign up</Link>
             </Button>
           </div>
         </nav>
 
-        <section className="relative z-10 text-center px-6 pt-20 pb-32 max-w-3xl mx-auto">
-          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-foreground mb-6 leading-tight">
+        <section className="text-center px-6 pt-24 pb-36 max-w-3xl mx-auto">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 text-primary text-sm mb-8 animate-fade-in">
+            <Sparkles className="w-4 h-4" />
+            Bio-Link Platform
+          </div>
+          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-foreground mb-6 leading-tight animate-fade-in">
             Your digital identity,{' '}
             <span className="text-primary glow-text">redefined</span>
           </h1>
-          <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-xl mx-auto">
+          <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-xl mx-auto animate-fade-in" style={{ animationDelay: '0.1s' }}>
             Build a stunning bio-link page with 3D effects, music, video backgrounds, custom badges, and more.
           </p>
-          <Button size="lg" className="text-base px-8 py-6" asChild>
-            <Link to="/signup">Claim your page →</Link>
-          </Button>
+          <div className="flex items-center justify-center gap-4 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <Button size="lg" className="text-base px-8 py-6 btn-glow hover-scale" asChild>
+              <Link to="/signup">Claim your page →</Link>
+            </Button>
+            <Button size="lg" variant="outline" className="text-base px-8 py-6 hover-scale" asChild>
+              <Link to="/login">Sign in</Link>
+            </Button>
+          </div>
         </section>
       </header>
 
       {/* Features */}
-      <section className="px-6 py-24 max-w-5xl mx-auto">
+      <section className="relative z-10 px-6 py-24 max-w-5xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {features.map((f) => (
-            <div key={f.title} className="glass-card rounded-xl p-6 hover:border-primary/30 transition-colors">
-              <f.icon className="w-8 h-8 text-primary mb-4" />
+          {features.map((f, i) => (
+            <div
+              key={f.title}
+              className="glass-card rounded-xl p-6 hover:border-primary/30 transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_30px_-5px_hsl(var(--primary)/0.15)] animate-fade-in"
+              style={{ animationDelay: `${0.1 * i}s` }}
+            >
+              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                <f.icon className="w-6 h-6 text-primary" />
+              </div>
               <h3 className="text-lg font-semibold text-foreground mb-2">{f.title}</h3>
               <p className="text-muted-foreground text-sm">{f.desc}</p>
             </div>
@@ -57,7 +94,7 @@ export default function Landing() {
       </section>
 
       {/* Footer */}
-      <footer className="text-center py-10 text-muted-foreground text-sm border-t border-border">
+      <footer className="relative z-10 text-center py-10 text-muted-foreground text-sm border-t border-border">
         © 2025 bio.link — All rights reserved
       </footer>
     </div>
