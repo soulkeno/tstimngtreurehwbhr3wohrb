@@ -18,12 +18,8 @@ export default function Signup() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!/^[a-zA-Z0-9_-]+$/.test(username)) {
-      toast.error('Username can only contain letters, numbers, hyphens, and underscores');
-      return;
-    }
-    if (username.length < 3 || username.length > 30) {
-      toast.error('Username must be 3-30 characters');
+    if (username.length < 1 || username.length > 30) {
+      toast.error('Username must be 1-30 characters');
       return;
     }
 
