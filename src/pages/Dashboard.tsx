@@ -22,6 +22,7 @@ export interface Profile {
   video_bg_url: string | null;
   custom_cursor_url: string | null;
   display_name_effect: string;
+  description_effect: string;
   background_effect: string;
   cursor_effect: string;
   discord_user_id: string | null;

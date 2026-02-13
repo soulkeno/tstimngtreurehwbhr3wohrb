@@ -33,6 +33,7 @@ interface LinkItem {
   label: string;
   url: string;
   sort_order: number;
+  icon_url: string | null;
 }
 
 export function LinksTab({ userId }: { userId: string }) {
@@ -40,6 +41,7 @@ export function LinksTab({ userId }: { userId: string }) {
   const [platform, setPlatform] = useState('custom');
   const [label, setLabel] = useState('');
   const [url, setUrl] = useState('');
+  const [iconFile, setIconFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
 
   const fetchLinks = async () => {
@@ -56,12 +58,28 @@ export function LinksTab({ userId }: { userId: string }) {
   const addLink = async () => {
     if (!url.trim()) { toast.error('URL is required'); return; }
     setLoading(true);
+
+    let iconUrl: string | null = null;
+    if (iconFile) {
+      const ext = iconFile.name.split('.').pop();
+      const path = `${userId}/${crypto.randomUUID()}.${ext}`;
+      const { error: uploadError } = await supabase.storage.from('badges').upload(path, iconFile);
+      if (uploadError) {
+        toast.error('Icon upload failed');
+        setLoading(false);
+        return;
+      }
+      const { data: { publicUrl } } = supabase.storage.from('badges').getPublicUrl(path);
+      iconUrl = publicUrl;
+    }
+
     const { error } = await supabase.from('links').insert({
       user_id: userId,
       platform,
       label: label.slice(0, 50),
       url: url.slice(0, 500),
       sort_order: links.length,
+      icon_url: iconUrl,
     });
     setLoading(false);
     if (error) toast.error('Failed to add link');
@@ -69,6 +87,7 @@ export function LinksTab({ userId }: { userId: string }) {
       setPlatform('custom');
       setLabel('');
       setUrl('');
+      setIconFile(null);
       fetchLinks();
       toast.success('Link added');
     }
@@ -91,11 +110,15 @@ export function LinksTab({ userId }: { userId: string }) {
           {links.map((link) => (
             <div key={link.id} className="flex items-center justify-between bg-secondary rounded-lg px-4 py-3">
               <div className="flex items-center gap-2">
-                <span className="text-foreground">{PLATFORM_ICONS[link.platform] || <Globe className="w-4 h-4" />}</span>
+                {link.icon_url ? (
+                  <img src={link.icon_url} alt="" className="w-4 h-4 object-contain" />
+                ) : (
+                  <span className="text-foreground">{PLATFORM_ICONS[link.platform] || <Globe className="w-4 h-4" />}</span>
+                )}
                 <div>
-                <span className="text-sm font-medium text-foreground capitalize">{link.platform}</span>
-                {link.label && <span className="text-muted-foreground text-sm ml-2">— {link.label}</span>}
-                <p className="text-xs text-muted-foreground truncate max-w-xs">{link.url}</p>
+                  <span className="text-sm font-medium text-foreground capitalize">{link.platform}</span>
+                  {link.label && <span className="text-muted-foreground text-sm ml-2">— {link.label}</span>}
+                  <p className="text-xs text-muted-foreground truncate max-w-xs">{link.url}</p>
                 </div>
               </div>
               <Button variant="ghost" size="icon" onClick={() => removeLink(link.id)}>
@@ -131,6 +154,16 @@ export function LinksTab({ userId }: { userId: string }) {
               <Label className="text-xs">URL</Label>
               <Input value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://..." className="bg-secondary border-border" />
             </div>
+          </div>
+          <div className="space-y-1">
+            <Label className="text-xs">Custom Icon (optional)</Label>
+            <Input
+              type="file"
+              accept="image/png,image/gif,image/webp,image/svg+xml"
+              onChange={(e) => setIconFile(e.target.files?.[0] || null)}
+              className="bg-secondary border-border"
+            />
+            <p className="text-xs text-muted-foreground">Upload your own icon for this link. Leave empty to use the default platform icon.</p>
           </div>
           <Button onClick={addLink} disabled={loading} size="sm">
             <Plus className="w-4 h-4 mr-1" /> Add link

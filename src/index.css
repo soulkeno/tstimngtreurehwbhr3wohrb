@@ -61,6 +61,20 @@
     text-shadow: 0 0 10px hsl(270 60% 55% / 0.6), 0 0 20px hsl(270 60% 55% / 0.4), 0 0 40px hsl(270 60% 55% / 0.2);
   }
 
+  @keyframes rainbow-shift {
+    0% { color: #ff0000; }
+    16% { color: #ff8800; }
+    33% { color: #ffff00; }
+    50% { color: #00ff00; }
+    66% { color: #0088ff; }
+    83% { color: #8800ff; }
+    100% { color: #ff0000; }
+  }
+
+  .rainbow-text {
+    animation: rainbow-shift 3s linear infinite;
+  }
+
   .glass-card {
     background: hsl(0 0% 8% / 0.85);
     backdrop-filter: blur(12px);

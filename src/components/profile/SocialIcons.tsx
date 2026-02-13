@@ -18,6 +18,7 @@ interface Link {
   platform: string;
   label: string;
   url: string;
+  icon_url?: string | null;
 }
 
 export function SocialIcons({ links }: { links: Link[] }) {
@@ -34,7 +35,11 @@ export function SocialIcons({ links }: { links: Link[] }) {
             title={link.label || link.platform}
             className="text-foreground hover:text-primary transition-all duration-200 hover:scale-110"
           >
-            {PLATFORM_ICONS[link.platform] || <Globe className="w-6 h-6" />}
+            {link.icon_url ? (
+              <img src={link.icon_url} alt={link.label || link.platform} className="w-6 h-6 object-contain" />
+            ) : (
+              PLATFORM_ICONS[link.platform] || <Globe className="w-6 h-6" />
+            )}
           </a>
         );
       })}

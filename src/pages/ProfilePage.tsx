@@ -8,6 +8,7 @@ import { SnowEffect } from '@/components/profile/SnowEffect';
 import { RainEffect } from '@/components/profile/RainEffect';
 import { CursorSnowTrail } from '@/components/profile/CursorSnowTrail';
 import { ButterflyEffect } from '@/components/profile/ButterflyEffect';
+import { renderTextEffect } from '@/components/profile/TextEffects';
 
 interface ProfileData {
   id: string;
@@ -21,6 +22,7 @@ interface ProfileData {
   video_bg_url: string | null;
   custom_cursor_url: string | null;
   display_name_effect: string;
+  description_effect: string;
   background_effect: string;
   cursor_effect: string;
   discord_user_id: string | null;
@@ -36,6 +38,7 @@ interface LinkData {
   platform: string;
   label: string;
   url: string;
+  icon_url: string | null;
 }
 
 export default function ProfilePage() {
@@ -59,10 +62,8 @@ export default function ProfilePage() {
       if (!p) { setNotFound(true); return; }
       setProfile(p as ProfileData);
 
-      // Track view
       await supabase.from('profile_views').insert({ profile_id: p.id });
 
-      // Load badges and links in parallel
       const [{ data: b }, { data: l }] = await Promise.all([
         supabase
           .from('user_badges')
@@ -82,7 +83,6 @@ export default function ProfilePage() {
     load();
   }, [username]);
 
-  // 3D tilt effect
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     if (!cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
@@ -114,25 +114,20 @@ export default function ProfilePage() {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center bg-background relative overflow-hidden"
+      className="min-h-screen flex flex-col items-center justify-center bg-background relative overflow-hidden gap-4 py-8"
       style={profile.custom_cursor_url ? { cursor: `url(${profile.custom_cursor_url}), auto` } : undefined}
     >
       {/* Video background */}
       {profile.video_bg_url && (
         <video
-          autoPlay
-          loop
-          muted
-          playsInline
+          autoPlay loop muted playsInline
           className="absolute inset-0 w-full h-full object-cover opacity-40"
           src={profile.video_bg_url}
         />
       )}
 
       {/* Background effects */}
-      {profile.background_effect === 'blur' && (
-        <div className="absolute inset-0 backdrop-blur-sm" />
-      )}
+      {profile.background_effect === 'blur' && <div className="absolute inset-0 backdrop-blur-sm" />}
       {profile.background_effect === 'snowflakes' && <SnowEffect />}
       {profile.background_effect === 'rain' && <RainEffect />}
 
@@ -175,42 +170,46 @@ export default function ProfilePage() {
         <div className="mb-1 relative" ref={nameRef}>
           {profile.display_name_effect === 'butterflies' && <ButterflyEffect targetRef={nameRef} />}
           <div className="flex items-center gap-2">
-            <h1
-              className={`text-3xl font-bold text-foreground leading-none ${
-                profile.display_name_effect === 'glow' ? 'glow-text' : ''
-              }`}
-            >
-              {profile.display_name || profile.username}
+            <h1 className="text-3xl font-bold leading-none">
+              {renderTextEffect(
+                profile.display_name || profile.username,
+                profile.display_name_effect,
+                'text-foreground'
+              )}
             </h1>
-            <div className="flex items-center gap-1 shrink-0">
-              {badges.map((b) => (
-                <img
-                  key={b.badge_id}
-                  src={b.badges.icon_url}
-                  alt={b.badges.name}
-                  title={b.badges.name}
-                  className="w-5 h-5 object-contain"
-                />
-              ))}
-            </div>
+            {badges.length > 0 && (
+              <div className="flex items-center gap-1 bg-secondary/80 rounded-full px-2 py-1 shrink-0">
+                {badges.map((b) => (
+                  <img
+                    key={b.badge_id}
+                    src={b.badges.icon_url}
+                    alt={b.badges.name}
+                    title={b.badges.name}
+                    className="w-5 h-5 object-contain"
+                  />
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
         {/* Description */}
         {profile.description && (
-          <p className="text-muted-foreground text-sm mb-4">{profile.description}</p>
+          <div className="text-sm mb-4">
+            {renderTextEffect(profile.description, profile.description_effect, 'text-muted-foreground')}
+          </div>
         )}
 
         {/* Social icons */}
         {links.length > 0 && <SocialIcons links={links} />}
-
-        {/* Music player */}
-        {profile.music_url && (
-          <div className="mt-4">
-            <MusicPlayer src={profile.music_url} />
-          </div>
-        )}
       </div>
+
+      {/* Music player - separate card */}
+      {profile.music_url && (
+        <div className="relative z-10 w-full max-w-lg mx-4">
+          <MusicPlayer src={profile.music_url} />
+        </div>
+      )}
     </div>
   );
 }
