@@ -1,8 +1,13 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { Play, Pause, SkipBack, SkipForward } from 'lucide-react';
 
-export function MusicPlayer({ src }: { src: string }) {
+interface MusicPlayerProps {
+  src: string;
+}
+
+export function MusicPlayer({ src }: MusicPlayerProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
   const [playing, setPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -16,6 +21,14 @@ export function MusicPlayer({ src }: { src: string }) {
     audio.addEventListener('timeupdate', onTime);
     audio.addEventListener('loadedmetadata', onMeta);
     audio.addEventListener('ended', onEnd);
+
+    // Autoplay
+    const tryPlay = () => {
+      audio.play().then(() => setPlaying(true)).catch(() => {});
+    };
+    if (audio.readyState >= 2) tryPlay();
+    else audio.addEventListener('canplaythrough', tryPlay, { once: true });
+
     return () => {
       audio.removeEventListener('timeupdate', onTime);
       audio.removeEventListener('loadedmetadata', onMeta);
@@ -43,8 +56,26 @@ export function MusicPlayer({ src }: { src: string }) {
     return `${m}:${sec.toString().padStart(2, '0')}`;
   };
 
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    cardRef.current.style.transform = `perspective(800px) rotateY(${x * 20}deg) rotateX(${-y * 20}deg) scale3d(1.04, 1.04, 1.04)`;
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    if (!cardRef.current) return;
+    cardRef.current.style.transform = 'perspective(1000px) rotateY(0deg) rotateX(0deg) scale3d(1, 1, 1)';
+  }, []);
+
   return (
-    <div className="glass-card rounded-xl p-4">
+    <div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className="glass-card rounded-xl p-4 transition-transform duration-200 ease-out"
+    >
       <audio ref={audioRef} src={src} preload="metadata" />
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-2">
