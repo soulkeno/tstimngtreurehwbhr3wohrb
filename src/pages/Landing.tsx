@@ -57,11 +57,10 @@ export default function Landing() {
             kenos.lol
           </div>
           <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-foreground mb-6 leading-tight animate-fade-in">
-            your page,{' '}
-            <span className="text-primary glow-text">your rules</span>
+            kenos<span className="text-primary glow-text">.lol</span>
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-xl mx-auto animate-fade-in" style={{ animationDelay: '0.1s' }}>
-            one link for everything. music, badges, effects, vibes. no boring templates.
+            free biolink service
           </p>
           <div className="flex items-center justify-center gap-4 animate-fade-in" style={{ animationDelay: '0.2s' }}>
             <Button size="lg" className="text-base px-8 py-6 btn-glow hover-scale" asChild>
