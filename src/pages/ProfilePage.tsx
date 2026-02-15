@@ -140,8 +140,8 @@ export default function ProfilePage() {
         ref={cardRef}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        className="relative z-10 w-full max-w-lg mx-4 glass-card rounded-2xl p-6 transition-transform duration-200 ease-out"
-        style={{ backgroundColor: profile.card_color ? `${profile.card_color}cc` : undefined }}
+        className={`relative z-10 w-full max-w-lg mx-4 rounded-2xl p-6 transition-transform duration-200 ease-out backdrop-blur-xl border border-border`}
+        style={{ background: profile.card_color ? `${profile.card_color}cc` : 'hsl(0 0% 8% / 0.85)' }}
       >
         {/* Top section: avatar + stats */}
         <div className="flex items-start justify-between mb-4">
