@@ -6,6 +6,7 @@ import {
   ArrowRight, Headphones
 } from 'lucide-react';
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 
 const navLinks = [
   { label: 'Features', href: '#features' },
@@ -68,17 +69,70 @@ function FAQItem({ q, a }: { q: string; a: string }) {
         <ChevronDown className={`w-5 h-5 text-muted-foreground transition-transform duration-200 ${open ? 'rotate-180' : ''}`} />
       </button>
       {open && (
-        <div className="px-6 pb-4 text-muted-foreground text-sm leading-relaxed">
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: 'auto' }}
+          className="px-6 pb-4 text-muted-foreground text-sm leading-relaxed"
+        >
           {a}
-        </div>
+        </motion.div>
       )}
     </div>
   );
 }
 
+// Wave text animation: each letter animates in with a staggered delay
+function WaveText({ text, className }: { text: React.ReactNode; className?: string }) {
+  if (typeof text !== 'string') {
+    return (
+      <motion.span
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className={className}
+      >
+        {text}
+      </motion.span>
+    );
+  }
+
+  return (
+    <span className={className}>
+      {text.split('').map((char, i) => (
+        <motion.span
+          key={i}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            delay: i * 0.03,
+            duration: 0.4,
+            ease: [0.25, 0.46, 0.45, 0.94],
+          }}
+          className="inline-block"
+          style={{ whiteSpace: char === ' ' ? 'pre' : undefined }}
+        >
+          {char}
+        </motion.span>
+      ))}
+    </span>
+  );
+}
+
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.1 },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0, 0, 0.2, 1] as const } },
+};
+
 export default function Landing() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background wave-bg">
       {/* Hero gradient */}
       <div className="hero-gradient absolute inset-0 h-[800px] pointer-events-none" />
 
@@ -93,17 +147,21 @@ export default function Landing() {
 
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map((l) => (
-            <a key={l.label} href={l.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <a
+              key={l.label}
+              href={l.href}
+              className="nav-link-underline text-sm text-muted-foreground hover:text-foreground transition-colors pb-1"
+            >
               {l.label}
             </a>
           ))}
         </div>
 
         <div className="flex items-center gap-3">
-          <Button variant="ghost" size="sm" asChild>
+          <Button variant="ghost" size="sm" className="rounded-none btn-press" asChild>
             <Link to="/login">Login</Link>
           </Button>
-          <Button size="sm" asChild>
+          <Button size="sm" className="rounded-none btn-press border border-primary/30 bg-primary/10 text-primary hover:bg-primary/20" asChild>
             <Link to="/signup">Sign Up</Link>
           </Button>
         </div>
@@ -113,24 +171,47 @@ export default function Landing() {
       <section className="relative z-10 max-w-7xl mx-auto px-6 pt-20 pb-32">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold mb-6 border border-primary/20">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4 }}
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold mb-6 border border-primary/20"
+            >
               UPDATE
-            </div>
+            </motion.div>
             <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-foreground mb-6 leading-[1.05]">
-              Most <span className="text-primary">powerful</span><br />
-              Screenshare Tool
+              <WaveText text="Most " />
+              <WaveText text="powerful" className="text-primary" />
+              <br />
+              <WaveText text="Screenshare Tool" />
             </h1>
-            <p className="text-lg text-muted-foreground mb-8 max-w-md leading-relaxed">
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 0.5 }}
+              className="text-lg text-muted-foreground mb-8 max-w-md leading-relaxed"
+            >
               Experience an unparalleled service designed with quality, safety, and speed in mind. Detect cheaters in 60 seconds with advanced forensic analysis.
-            </p>
-            <Button size="lg" className="text-base px-8 py-6 gap-2 rounded-full">
-              <Play className="w-4 h-4" fill="currentColor" />
-              Start Keno
-            </Button>
+            </motion.p>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8, duration: 0.5 }}
+            >
+              <Button size="lg" className="text-base px-8 py-6 gap-2 rounded-none btn-press">
+                <Play className="w-4 h-4" fill="currentColor" />
+                Start Keno
+              </Button>
+            </motion.div>
           </div>
 
           {/* Dashboard mockup */}
-          <div className="relative hidden lg:block">
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3, duration: 0.7, ease: 'easeOut' }}
+            className="relative hidden lg:block"
+          >
             <div className="rounded-2xl bg-card border border-border shadow-2xl overflow-hidden">
               <div className="p-4 bg-card border-b border-border flex items-center gap-2">
                 <div className="flex gap-1.5">
@@ -141,7 +222,6 @@ export default function Landing() {
                 <span className="text-xs text-muted-foreground ml-2">dashboard &gt; home</span>
               </div>
               <div className="p-6 grid grid-cols-[180px_1fr] gap-4">
-                {/* Sidebar */}
                 <div className="space-y-1">
                   <div className="flex items-center gap-2 mb-4">
                     <div className="w-6 h-6 rounded bg-primary/20" />
@@ -157,11 +237,10 @@ export default function Landing() {
                     <div key={item} className="text-xs px-3 py-2 text-muted-foreground">{item}</div>
                   ))}
                 </div>
-                {/* Content */}
                 <div className="space-y-4">
                   <div>
                     <p className="text-xs text-muted-foreground mb-1">Welcome Back,</p>
-                    <p className="text-lg font-bold text-foreground">jean</p>
+                    <p className="text-lg font-bold text-foreground">keno</p>
                   </div>
                   <div className="rounded-xl bg-muted/50 border border-border p-4 h-32 flex items-end">
                     <div className="flex items-end gap-2 w-full">
@@ -178,13 +257,20 @@ export default function Landing() {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section id="features" className="relative z-10 max-w-7xl mx-auto px-6 py-24">
-        <div className="text-center mb-16">
+      <motion.section
+        id="features"
+        className="relative z-10 max-w-7xl mx-auto px-6 py-24"
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+      >
+        <motion.div className="text-center mb-16" variants={itemVariants}>
           <p className="text-sm font-semibold text-primary mb-2">See why</p>
           <h2 className="text-4xl md:text-5xl font-extrabold text-foreground mb-4">
             Why Choose Keno Anti-Cheat
@@ -192,12 +278,13 @@ export default function Landing() {
           <p className="text-muted-foreground max-w-lg mx-auto">
             Discover the key features of Keno
           </p>
-        </div>
+        </motion.div>
 
         <div className="grid md:grid-cols-3 gap-5">
           {features.map((f) => (
-            <div
+            <motion.div
               key={f.title}
+              variants={itemVariants}
               className="group rounded-2xl border border-border bg-card p-8 hover-lift"
             >
               <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-5 group-hover:bg-primary/20 transition-colors">
@@ -205,14 +292,20 @@ export default function Landing() {
               </div>
               <h3 className="text-xl font-bold text-foreground mb-3">{f.title}</h3>
               <p className="text-muted-foreground text-sm leading-relaxed">{f.desc}</p>
-            </div>
+            </motion.div>
           ))}
         </div>
-      </section>
+      </motion.section>
 
       {/* Solutions Grid */}
-      <section className="relative z-10 max-w-7xl mx-auto px-6 py-24">
-        <div className="text-center mb-16">
+      <motion.section
+        className="relative z-10 max-w-7xl mx-auto px-6 py-24"
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+      >
+        <motion.div className="text-center mb-16" variants={itemVariants}>
           <p className="text-sm font-semibold text-primary mb-2">A reliable solution against cheaters</p>
           <h2 className="text-4xl md:text-5xl font-extrabold text-foreground mb-4">
             Anti-Cheat Solutions
@@ -220,35 +313,45 @@ export default function Landing() {
           <p className="text-muted-foreground max-w-xl mx-auto">
             An introduction to the basic features and customizable options available with Keno.
           </p>
-        </div>
+        </motion.div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
           {solutions.map((s) => (
-            <div key={s.title} className="group rounded-2xl border border-border bg-card p-6 hover-lift">
+            <motion.div key={s.title} variants={itemVariants} className="group rounded-2xl border border-border bg-card p-6 hover-lift">
               <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
                 <s.icon className="w-5 h-5 text-primary" />
               </div>
               <h3 className="text-lg font-bold text-foreground mb-2">{s.title}</h3>
               <p className="text-muted-foreground text-sm leading-relaxed">{s.desc}</p>
-            </div>
+            </motion.div>
           ))}
         </div>
-      </section>
+      </motion.section>
 
       {/* How It Works */}
-      <section className="relative z-10 max-w-5xl mx-auto px-6 py-24">
-        <div className="text-center mb-16">
+      <motion.section
+        className="relative z-10 max-w-5xl mx-auto px-6 py-24"
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+      >
+        <motion.div className="text-center mb-16" variants={itemVariants}>
           <h2 className="text-4xl md:text-5xl font-extrabold text-foreground mb-4">
             How Keno works
           </h2>
           <p className="text-muted-foreground max-w-xl mx-auto">
             We show you how easy it is to use Keno: in just a few steps, you can download, scan, and get secure results.
           </p>
-        </div>
+        </motion.div>
 
         <div className="space-y-8">
           {steps.map((s, i) => (
-            <div key={s.num} className={`flex items-start gap-6 ${i % 2 === 1 ? 'flex-row-reverse text-right' : ''}`}>
+            <motion.div
+              key={s.num}
+              variants={itemVariants}
+              className={`flex items-start gap-6 ${i % 2 === 1 ? 'flex-row-reverse text-right' : ''}`}
+            >
               <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-primary flex items-center justify-center text-primary-foreground font-bold text-xl">
                 {s.num}
               </div>
@@ -256,44 +359,59 @@ export default function Landing() {
                 <h3 className="text-xl font-bold text-foreground mb-2">{s.title}</h3>
                 <p className="text-muted-foreground text-sm leading-relaxed">{s.desc}</p>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
-      </section>
+      </motion.section>
 
       {/* FAQ */}
-      <section id="faq" className="relative z-10 max-w-3xl mx-auto px-6 py-24">
-        <div className="text-center mb-16">
+      <motion.section
+        id="faq"
+        className="relative z-10 max-w-3xl mx-auto px-6 py-24"
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+      >
+        <motion.div className="text-center mb-16" variants={itemVariants}>
           <p className="text-sm font-semibold text-primary mb-2">You've got answers</p>
           <h2 className="text-4xl md:text-5xl font-extrabold text-foreground mb-4">
             Answer your <span className="text-primary">questions</span>
           </h2>
-        </div>
+        </motion.div>
 
         <div className="space-y-3">
           {faqs.map((f) => (
-            <FAQItem key={f.q} q={f.q} a={f.a} />
+            <motion.div key={f.q} variants={itemVariants}>
+              <FAQItem q={f.q} a={f.a} />
+            </motion.div>
           ))}
         </div>
-      </section>
+      </motion.section>
 
       {/* CTA Footer */}
-      <section className="relative z-10 max-w-4xl mx-auto px-6 py-24 text-center">
+      <motion.section
+        className="relative z-10 max-w-4xl mx-auto px-6 py-24 text-center"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
         <h2 className="text-4xl md:text-5xl font-extrabold text-foreground mb-4">
           Start Swimming Now
         </h2>
         <div className="flex items-center justify-center gap-4 mt-8">
-          <Button size="lg" className="text-base px-8 py-6 rounded-full gap-2" asChild>
+          <Button size="lg" className="text-base px-8 py-6 rounded-none gap-2 btn-press" asChild>
             <Link to="/signup">
               Get Started <ArrowRight className="w-4 h-4" />
             </Link>
           </Button>
-          <Button size="lg" variant="outline" className="text-base px-8 py-6 rounded-full">
+          <Button size="lg" variant="outline" className="text-base px-8 py-6 rounded-none btn-press">
             Join our Community
           </Button>
         </div>
         <p className="text-muted-foreground text-sm mt-6">More than <strong className="text-foreground">500+</strong> frequent buyers</p>
-      </section>
+      </motion.section>
 
       {/* Footer */}
       <footer className="relative z-10 border-t border-border py-8 text-center text-muted-foreground text-sm">
