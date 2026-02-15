@@ -99,7 +99,6 @@ export function DesignTab({ profile, onUpdate }: Props) {
   const [descriptionEffect, setDescriptionEffect] = useState(profile.description_effect || 'none');
   const [backgroundEffect, setBackgroundEffect] = useState(profile.background_effect);
   const [cursorEffect, setCursorEffect] = useState(profile.cursor_effect);
-  const [cardColor, setCardColor] = useState(profile.card_color || '#000000');
   const [saving, setSaving] = useState(false);
 
   const handleFileUpload = async (bucket: string, field: string, e: React.ChangeEvent<HTMLInputElement>) => {
@@ -125,7 +124,6 @@ export function DesignTab({ profile, onUpdate }: Props) {
       description_effect: descriptionEffect,
       background_effect: backgroundEffect,
       cursor_effect: cursorEffect,
-      card_color: cardColor,
     }).eq('id', profile.id);
     setSaving(false);
     if (error) toast.error('Failed to save');
@@ -192,29 +190,6 @@ export function DesignTab({ profile, onUpdate }: Props) {
             onChange={setCursorEffect}
           />
 
-          {/* Card color picker */}
-          <div className="space-y-3">
-            <Label className="text-sm font-medium">Card Color</Label>
-            <div className="flex items-center gap-3">
-              <input
-                type="color"
-                value={cardColor}
-                onChange={(e) => setCardColor(e.target.value)}
-                className="w-10 h-10 rounded-lg border-2 border-border cursor-pointer bg-transparent"
-              />
-              <Input
-                value={cardColor}
-                onChange={(e) => setCardColor(e.target.value)}
-                className="bg-secondary border-border w-32 font-mono text-sm"
-                placeholder="#000000"
-              />
-              <div
-                className="w-24 h-10 rounded-lg border border-border"
-                style={{ backgroundColor: cardColor + 'cc' }}
-              />
-            </div>
-            <p className="text-xs text-muted-foreground">Sets the background color of your profile card (keeps transparency).</p>
-          </div>
           <Button onClick={saveEffects} disabled={saving}>
             {saving ? 'Saving...' : 'Save effects'}
           </Button>

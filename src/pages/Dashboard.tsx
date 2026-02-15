@@ -4,7 +4,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { LogOut, ExternalLink } from 'lucide-react';
+import { LogOut, ExternalLink, Shield } from 'lucide-react';
 import { BadgesTab } from '@/components/dashboard/BadgesTab';
 import { LinksTab } from '@/components/dashboard/LinksTab';
 import { AccountTab } from '@/components/dashboard/AccountTab';
@@ -117,7 +117,7 @@ export default function Dashboard() {
 
       <main className="relative z-10 max-w-3xl mx-auto px-6 py-8">
         <h1 className="text-3xl font-bold text-foreground mb-1">Dashboard</h1>
-        <p className="text-muted-foreground mb-6">Customize your bio-link page</p>
+        <p className="text-muted-foreground mb-6">Manage your anticheat settings & profile</p>
 
         <Tabs defaultValue="account" className="w-full">
           <TabsList className="bg-secondary mb-6 w-full justify-start">
@@ -125,6 +125,7 @@ export default function Dashboard() {
             <TabsTrigger value="links">Links</TabsTrigger>
             <TabsTrigger value="badges">Badges</TabsTrigger>
             <TabsTrigger value="design">Design</TabsTrigger>
+            <TabsTrigger value="cheaters">Detected Cheaters</TabsTrigger>
           </TabsList>
 
           <TabsContent value="account">
@@ -138,6 +139,13 @@ export default function Dashboard() {
           </TabsContent>
           <TabsContent value="design">
             <DesignTab profile={profile} onUpdate={refreshProfile} />
+          </TabsContent>
+          <TabsContent value="cheaters">
+            <div className="glass-card rounded-2xl border border-border p-8 text-center">
+              <Shield className="w-12 h-12 text-primary mx-auto mb-4" />
+              <h3 className="text-xl font-bold text-foreground mb-2">Detected Cheaters</h3>
+              <p className="text-muted-foreground text-sm">No cheaters detected yet. Run a scan to get started.</p>
+            </div>
           </TabsContent>
         </Tabs>
       </main>

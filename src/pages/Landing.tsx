@@ -183,7 +183,9 @@ export default function Landing() {
               <WaveText text="Most " />
               <WaveText text="powerful" className="text-primary" />
               <br />
-              <WaveText text="Screenshare Tool" />
+              <WaveText text="Minecraft" />
+              <br />
+              <WaveText text="AntiCheat-Tool" />
             </h1>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -227,13 +229,13 @@ export default function Landing() {
                     <div className="w-6 h-6 rounded bg-primary/20" />
                     <span className="text-xs font-semibold text-foreground">Keno</span>
                   </div>
-                  {['Home', 'Pins', 'Custom Strings', 'Configs'].map((item, i) => (
+                  {['Home', 'Detected Cheaters', 'Scan History', 'Configs'].map((item, i) => (
                     <div key={item} className={`text-xs px-3 py-2 rounded-lg ${i === 0 ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground'}`}>
                       {item}
                     </div>
                   ))}
                   <div className="border-t border-border my-3" />
-                  {['Custom Gui', 'Publics Gui'].map((item) => (
+                  {['Server Logs', 'Player Reports'].map((item) => (
                     <div key={item} className="text-xs px-3 py-2 text-muted-foreground">{item}</div>
                   ))}
                 </div>
