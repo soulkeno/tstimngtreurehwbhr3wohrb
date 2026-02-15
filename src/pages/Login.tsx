@@ -34,7 +34,7 @@ export default function Login() {
             keno<span className="text-primary">.ac</span>
           </Link>
           <CardTitle className="text-2xl">Welcome back</CardTitle>
-          <CardDescription>Sign in to manage your bio-link</CardDescription>
+          <CardDescription>Sign in to your anticheat dashboard</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
