@@ -61,15 +61,15 @@ export function BadgesTab({ userId }: { userId: string }) {
 
   const togglePremadeBadge = async (premade: typeof PREMADE_BADGES[0]) => {
     if (activePremadeNames.has(premade.name)) {
-      // Turn off - find and remove the user_badge
-      const { data: badges } = await supabase.from('badges').select('id').eq('name', premade.name).eq('is_custom', false).limit(1);
-      const badge = badges?.[0];
-      if (badge) {
-        const { error } = await supabase.from('user_badges').delete().eq('user_id', userId).eq('badge_id', badge.id);
+      // Turn off - find the user's actual user_badge entry for this premade badge
+      const { data: userBadges } = await supabase
+        .from('user_badges')
+        .select('id, badge_id, badges(name, is_custom)')
+        .eq('user_id', userId);
+      const match = userBadges?.find((ub: any) => ub.badges?.name === premade.name && !ub.badges?.is_custom);
+      if (match) {
+        const { error } = await supabase.from('user_badges').delete().eq('id', match.id);
         if (error) { console.error('Unequip error:', error); toast.error('Failed to unequip badge'); return; }
-        toast.success('Badge unequipped');
-      } else {
-        console.error('No badge found for', premade.name);
       }
     } else {
       // Turn on - ensure badge exists, then equip
