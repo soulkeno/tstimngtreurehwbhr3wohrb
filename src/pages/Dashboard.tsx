@@ -25,6 +25,7 @@ export interface Profile {
   description_effect: string;
   background_effect: string;
   cursor_effect: string;
+  card_color: string;
   discord_user_id: string | null;
   view_count: number;
 }
