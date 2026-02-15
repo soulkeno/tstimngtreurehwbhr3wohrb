@@ -90,7 +90,45 @@
 
 @layer utilities {
   .hero-gradient {
-    background: radial-gradient(ellipse 80% 50% at 50% -20%, hsl(270 60% 65% / 0.2), transparent);
+    background: 
+      radial-gradient(ellipse 60% 40% at 20% 30%, hsl(270 60% 50% / 0.15), transparent),
+      radial-gradient(ellipse 50% 50% at 80% 20%, hsl(280 50% 40% / 0.12), transparent),
+      radial-gradient(ellipse 80% 50% at 50% -20%, hsl(270 60% 65% / 0.2), transparent);
+  }
+
+  .wave-bg {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .wave-bg::before,
+  .wave-bg::after {
+    content: '';
+    position: absolute;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    border-radius: 45%;
+    animation: wave-rotate 20s linear infinite;
+    opacity: 0.04;
+    background: hsl(270 60% 65%);
+  }
+
+  .wave-bg::before {
+    bottom: -80%;
+    animation-duration: 25s;
+  }
+
+  .wave-bg::after {
+    bottom: -85%;
+    animation-duration: 30s;
+    animation-direction: reverse;
+    opacity: 0.03;
+  }
+
+  @keyframes wave-rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
   }
 
   .glass-card {
@@ -105,5 +143,36 @@
 
   .glow-border {
     box-shadow: 0 0 0 1px hsl(var(--primary) / 0.1), 0 4px 24px hsl(var(--primary) / 0.08);
+  }
+
+  /* Nav link underline slide animation */
+  .nav-link-underline {
+    @apply relative;
+  }
+
+  .nav-link-underline::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-full h-[2px] bg-primary origin-left;
+    transform: scaleX(0);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .nav-link-underline:hover::after {
+    transform: scaleX(1);
+  }
+
+  /* Button press animation */
+  .btn-press {
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
+  }
+
+  .btn-press:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px hsl(270 60% 65% / 0.3);
+  }
+
+  .btn-press:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 4px hsl(270 60% 65% / 0.15);
   }
 }
