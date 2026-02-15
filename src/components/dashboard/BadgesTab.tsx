@@ -62,7 +62,8 @@ export function BadgesTab({ userId }: { userId: string }) {
   const togglePremadeBadge = async (premade: typeof PREMADE_BADGES[0]) => {
     if (activePremadeNames.has(premade.name)) {
       // Turn off - find and remove the user_badge
-      const { data: badge } = await supabase.from('badges').select('id').eq('name', premade.name).eq('is_custom', false).maybeSingle();
+      const { data: badges } = await supabase.from('badges').select('id').eq('name', premade.name).eq('is_custom', false).limit(1);
+      const badge = badges?.[0];
       if (badge) {
         await supabase.from('user_badges').delete().eq('user_id', userId).eq('badge_id', badge.id);
       }
