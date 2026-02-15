@@ -25,6 +25,7 @@ interface ProfileData {
   description_effect: string;
   background_effect: string;
   cursor_effect: string;
+  card_color: string;
   discord_user_id: string | null;
 }
 
@@ -140,6 +141,7 @@ export default function ProfilePage() {
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         className="relative z-10 w-full max-w-lg mx-4 glass-card rounded-2xl p-6 transition-transform duration-200 ease-out"
+        style={{ backgroundColor: profile.card_color ? `${profile.card_color}cc` : undefined }}
       >
         {/* Top section: avatar + stats */}
         <div className="flex items-start justify-between mb-4">

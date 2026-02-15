@@ -107,6 +107,7 @@ export type Database = {
         Row: {
           avatar_url: string | null
           background_effect: string
+          card_color: string
           created_at: string
           cursor_effect: string
           custom_cursor_url: string | null
@@ -127,6 +128,7 @@ export type Database = {
         Insert: {
           avatar_url?: string | null
           background_effect?: string
+          card_color?: string
           created_at?: string
           cursor_effect?: string
           custom_cursor_url?: string | null
@@ -147,6 +149,7 @@ export type Database = {
         Update: {
           avatar_url?: string | null
           background_effect?: string
+          card_color?: string
           created_at?: string
           cursor_effect?: string
           custom_cursor_url?: string | null

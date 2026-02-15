@@ -1,0 +1,1 @@
+ALTER TABLE public.profiles ADD COLUMN card_color text NOT NULL DEFAULT '#000000';
