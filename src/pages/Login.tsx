@@ -31,7 +31,7 @@ export default function Login() {
       <Card className="w-full max-w-md glass-card border-border">
         <CardHeader className="text-center">
           <Link to="/" className="text-xl font-bold text-foreground tracking-tight mb-2 block">
-            bio<span className="text-primary">.link</span>
+            keno<span className="text-primary">.ac</span>
           </Link>
           <CardTitle className="text-2xl">Welcome back</CardTitle>
           <CardDescription>Sign in to manage your bio-link</CardDescription>
