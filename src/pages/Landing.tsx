@@ -415,7 +415,7 @@ export default function Landing() {
 
       {/* Footer */}
       <footer className="relative z-10 border-t border-border py-8 text-center text-muted-foreground text-sm">
-        © 2025 Keno — All rights reserved
+        © 2025 Keno — All rights reserved.
       </footer>
     </div>
   );
