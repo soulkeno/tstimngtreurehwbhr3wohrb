@@ -65,7 +65,11 @@ export function BadgesTab({ userId }: { userId: string }) {
       const { data: badges } = await supabase.from('badges').select('id').eq('name', premade.name).eq('is_custom', false).limit(1);
       const badge = badges?.[0];
       if (badge) {
-        await supabase.from('user_badges').delete().eq('user_id', userId).eq('badge_id', badge.id);
+        const { error } = await supabase.from('user_badges').delete().eq('user_id', userId).eq('badge_id', badge.id);
+        if (error) { console.error('Unequip error:', error); toast.error('Failed to unequip badge'); return; }
+        toast.success('Badge unequipped');
+      } else {
+        console.error('No badge found for', premade.name);
       }
     } else {
       // Turn on - ensure badge exists, then equip
