@@ -20,27 +20,24 @@ const features = [
   {
     icon: Zap,
     title: 'Lightning Fast Speed',
-    desc: 'Ocean prioritizes completing scans within a strict time frame, averaging around 60 seconds for comprehensive cheat detection.',
-    large: true,
+    desc: 'Keno prioritizes completing scans within a strict time frame, averaging around 60 seconds for comprehensive cheat detection.',
   },
   {
     icon: Search,
     title: 'Detection Quality',
     desc: 'Powered by cutting-edge AI and expert digital forensics, we provide precise, trustworthy cheat detection results.',
-    large: true,
   },
   {
     icon: Shield,
     title: 'Military-Grade Security',
-    desc: 'Ocean is secured with military-grade encryption — because security comes first, and it\'s built into every part of our product.',
-    large: true,
+    desc: 'Keno is secured with military-grade encryption — because security comes first, and it\'s built into every part of our product.',
   },
 ];
 
 const solutions = [
-  { icon: Shield, title: 'Custom Detection Rules', desc: 'Ocean offers customizations ranging from simple design tweaks to real-time threat detection — all as part of our service.' },
+  { icon: Shield, title: 'Custom Detection Rules', desc: 'Keno offers customizations ranging from simple design tweaks to real-time threat detection — all as part of our service.' },
   { icon: Search, title: 'Forensic Detections', desc: 'Our detections are powered by deep expertise in digital forensics and an advanced understanding of operating systems.' },
-  { icon: Headphones, title: '24/7 Active Support', desc: "Ocean's support team sets us apart — delivering excellence and unmatched comfort to ensure the best service experience." },
+  { icon: Headphones, title: '24/7 Active Support', desc: "Keno's support team sets us apart — delivering excellence and unmatched comfort to ensure the best service experience." },
   { icon: Users, title: 'Growing Community', desc: 'Our community is constantly growing, with 500+ active servers and dedicated members ready to help you!' },
   { icon: FileText, title: 'Complete Documentation', desc: 'We provide documentation tailored for both new users and experts in the field of screensharing and cheat detection.' },
   { icon: Lock, title: 'Privacy Focused', desc: 'With future-focused security, we ensure every trace of information remains completely protected and encrypted.' },
@@ -48,14 +45,14 @@ const solutions = [
 
 const steps = [
   { num: 1, title: 'Downloading', desc: 'Effortlessly scan suspects in seconds with two simple clicks that handle everything automatically.', icon: Download },
-  { num: 2, title: 'Scanning', desc: 'Let Ocean take care of all the hard work for you. Simply wait a few seconds while our advanced technology delivers accurate results.', icon: Search },
+  { num: 2, title: 'Scanning', desc: 'Let Keno take care of all the hard work for you. Simply wait a few seconds while our advanced technology delivers accurate results.', icon: Search },
   { num: 3, title: 'Data Review', desc: 'Analyze the results on our dashboard and reach a final verdict on the suspect with confidence!', icon: BarChart3 },
 ];
 
 const faqs = [
-  { q: 'Why should you use Ocean?', a: 'Ocean offers you services to easily detect cheating users in your community through detections guaranteed by our team.' },
+  { q: 'Why should you use Keno?', a: 'Keno offers you services to easily detect cheating users in your community through detections guaranteed by our team.' },
   { q: 'What operating systems do you support?', a: 'Our scanner supports Windows operating systems (7, 8, 10 and 11) and Linux distributions.' },
-  { q: 'What type of data does Ocean collect?', a: 'We securely store data such as login activity, activity timestamps, program usage, and more.' },
+  { q: 'What type of data does Keno collect?', a: 'We securely store data such as login activity, activity timestamps, program usage, and more.' },
   { q: 'What payment methods do you accept?', a: 'We currently accept Credit/Debit Card, PayPal, US Bank Account, AliPay, WeChat Pay, PaySafeCard, Crypto, Pix, Cashapp, and Mercado Pago.' },
 ];
 
@@ -91,7 +88,7 @@ export default function Landing() {
           <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
             <span className="text-primary-foreground font-bold text-sm">&lt;&gt;</span>
           </div>
-          <span className="font-bold text-lg text-foreground">ocean</span>
+          <span className="font-bold text-lg text-foreground">keno</span>
         </div>
 
         <div className="hidden md:flex items-center gap-8">
@@ -128,7 +125,7 @@ export default function Landing() {
             </p>
             <Button size="lg" className="text-base px-8 py-6 gap-2 rounded-full">
               <Play className="w-4 h-4" fill="currentColor" />
-              Start Ocean
+              Start Keno
             </Button>
           </div>
 
@@ -148,7 +145,7 @@ export default function Landing() {
                 <div className="space-y-1">
                   <div className="flex items-center gap-2 mb-4">
                     <div className="w-6 h-6 rounded bg-primary/20" />
-                    <span className="text-xs font-semibold text-foreground">Ocean</span>
+                    <span className="text-xs font-semibold text-foreground">Keno</span>
                   </div>
                   {['Home', 'Pins', 'Custom Strings', 'Configs'].map((item, i) => (
                     <div key={item} className={`text-xs px-3 py-2 rounded-lg ${i === 0 ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground'}`}>
@@ -185,20 +182,20 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Features Section - "Why Choose Ocean" */}
+      {/* Features Section */}
       <section id="features" className="relative z-10 max-w-7xl mx-auto px-6 py-24">
         <div className="text-center mb-16">
           <p className="text-sm font-semibold text-primary mb-2">See why</p>
           <h2 className="text-4xl md:text-5xl font-extrabold text-foreground mb-4">
-            Why Choose Ocean Anti-Cheat
+            Why Choose Keno Anti-Cheat
           </h2>
           <p className="text-muted-foreground max-w-lg mx-auto">
-            Discover the key features of Ocean
+            Discover the key features of Keno
           </p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-5">
-          {features.map((f, i) => (
+          {features.map((f) => (
             <div
               key={f.title}
               className="group rounded-2xl border border-border bg-card p-8 hover-lift"
@@ -221,7 +218,7 @@ export default function Landing() {
             Anti-Cheat Solutions
           </h2>
           <p className="text-muted-foreground max-w-xl mx-auto">
-            An introduction to the basic features and customizable options available with Ocean.
+            An introduction to the basic features and customizable options available with Keno.
           </p>
         </div>
 
@@ -242,10 +239,10 @@ export default function Landing() {
       <section className="relative z-10 max-w-5xl mx-auto px-6 py-24">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-extrabold text-foreground mb-4">
-            How Ocean works
+            How Keno works
           </h2>
           <p className="text-muted-foreground max-w-xl mx-auto">
-            We show you how easy it is to use Ocean: in just a few steps, you can download, scan, and get secure results.
+            We show you how easy it is to use Keno: in just a few steps, you can download, scan, and get secure results.
           </p>
         </div>
 
@@ -300,7 +297,7 @@ export default function Landing() {
 
       {/* Footer */}
       <footer className="relative z-10 border-t border-border py-8 text-center text-muted-foreground text-sm">
-        © 2025 Ocean — All rights reserved
+        © 2025 Keno — All rights reserved
       </footer>
     </div>
   );
