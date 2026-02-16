@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import {
   Zap, Shield, Search, Users, FileText, Lock,
   Play, Download, BarChart3, ChevronDown,
-  ArrowRight, Headphones
+  ArrowRight, Headphones, Heart
 } from 'lucide-react';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
@@ -130,19 +130,68 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0, 0, 0.2, 1] as const } },
 };
 
+function TeddyBear({ className }: { className?: string }) {
+  return (
+    <span className={`text-4xl select-none pointer-events-none ${className || ''}`} aria-hidden>
+      🧸
+    </span>
+  );
+}
+
+function FloatingHearts() {
+  return (
+    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+      {Array.from({ length: 12 }).map((_, i) => (
+        <motion.span
+          key={i}
+          className="absolute text-primary/20 select-none"
+          style={{
+            left: `${(i * 8.3) % 100}%`,
+            top: `${(i * 13.7) % 100}%`,
+            fontSize: `${16 + (i % 4) * 8}px`,
+          }}
+          animate={{
+            y: [0, -15, 0],
+            rotate: [0, (i % 2 === 0 ? 10 : -10), 0],
+          }}
+          transition={{
+            duration: 3 + (i % 3),
+            repeat: Infinity,
+            delay: i * 0.4,
+          }}
+        >
+          {i % 3 === 0 ? '🧸' : i % 3 === 1 ? '💖' : '🎀'}
+        </motion.span>
+      ))}
+    </div>
+  );
+}
+
 export default function Landing() {
   return (
     <div className="min-h-screen bg-background wave-bg">
+      <FloatingHearts />
       {/* Hero gradient */}
       <div className="hero-gradient absolute inset-0 h-[800px] pointer-events-none" />
+
+      {/* Teddy bears decorations */}
+      <div className="absolute top-20 left-4 text-5xl opacity-30 pointer-events-none select-none z-0 rotate-[-15deg]">🧸</div>
+      <div className="absolute top-40 right-8 text-6xl opacity-20 pointer-events-none select-none z-0 rotate-12">🧸</div>
+      <div className="absolute top-[600px] left-[5%] text-4xl opacity-25 pointer-events-none select-none z-0 rotate-[-8deg]">🎀</div>
+      <div className="absolute top-[800px] right-[10%] text-5xl opacity-20 pointer-events-none select-none z-0 rotate-6">🧸</div>
+      <div className="absolute top-[1200px] left-[8%] text-6xl opacity-15 pointer-events-none select-none z-0 rotate-[-20deg]">💖</div>
+      <div className="absolute top-[1600px] right-[5%] text-5xl opacity-20 pointer-events-none select-none z-0 rotate-12">🧸</div>
+      <div className="absolute top-[2000px] left-[3%] text-4xl opacity-25 pointer-events-none select-none z-0">🎀</div>
+      <div className="absolute top-[2400px] right-[8%] text-6xl opacity-15 pointer-events-none select-none z-0 rotate-[-10deg]">🧸</div>
 
       {/* Nav */}
       <nav className="relative z-20 flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-            <span className="text-primary-foreground font-bold text-sm">&lt;&gt;</span>
+            <Heart className="w-4 h-4 text-primary-foreground" fill="currentColor" />
           </div>
           <span className="font-bold text-lg text-foreground">keno</span>
+          <span className="text-xs ml-1">🎀</span>
         </div>
 
         <div className="hidden md:flex items-center gap-8">
@@ -177,7 +226,7 @@ export default function Landing() {
               transition={{ duration: 0.4 }}
               className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold mb-6 border border-primary/20"
             >
-              UPDATE
+              UPDATE 💖
             </motion.div>
             <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-foreground mb-6 leading-[1.05]">
               <WaveText text="Most " />
@@ -400,24 +449,24 @@ export default function Landing() {
         transition={{ duration: 0.6 }}
       >
         <h2 className="text-4xl md:text-5xl font-extrabold text-foreground mb-4">
-          Start Swimming Now
+          Start Playing Now 🧸
         </h2>
         <div className="flex items-center justify-center gap-4 mt-8">
           <Button size="lg" className="text-base px-8 py-6 rounded-none gap-2 btn-press" asChild>
             <Link to="/signup">
-              Get Started <ArrowRight className="w-4 h-4" />
+              Get Started <Heart className="w-4 h-4" fill="currentColor" />
             </Link>
           </Button>
           <Button size="lg" variant="outline" className="text-base px-8 py-6 rounded-none btn-press">
-            Join our Community
+            Join our Community 💖
           </Button>
         </div>
-        <p className="text-muted-foreground text-sm mt-6">More than <strong className="text-foreground">500+</strong> frequent buyers</p>
+        <p className="text-muted-foreground text-sm mt-6">More than <strong className="text-foreground">500+</strong> frequent buyers 🎀</p>
       </motion.section>
 
       {/* Footer */}
       <footer className="relative z-10 border-t border-border py-8 text-center text-muted-foreground text-sm">
-        © 2025 Keno — All rights reserved.
+        © 2025 Keno — All rights reserved. 💖🧸
       </footer>
     </div>
   );
