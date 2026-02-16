@@ -63,20 +63,61 @@ function CopyButton({ text }: { text: string }) {
 export default function QueueSniper() {
   const location = useLocation();
 
-  const codeSnippet = `# Queue Sniper Setup
-# 1. Download the latest release from the link below
-# 2. Extract the zip file
-# 3. Open config.yml and set your username + target
-# 4. Run the sniper with: python sniper.py
-# 5. Wait for it to detect the queue and snipe
+  const codeSnippet = `(() => {
 
-# config.yml example:
-username: "your_username"
-target: "target_player"
-delay: 50  # ms
-mode: "aggressive"
+  const target = "join queue";
 
-# That's it! The sniper will handle the rest.`;
+  let done = false;
+
+  let scheduled = false;
+
+  const find = () =>
+
+    [...document.querySelectorAll("button,[role='button']")]
+
+      .find(el => el.textContent?.toLowerCase().includes(target));
+
+  const run = () => {
+
+    scheduled = false;
+
+    if (done) return;
+
+    const btn = find();
+
+    if (!btn) return;
+
+    btn.click();
+
+    done = true;
+
+    observer.disconnect();
+
+    console.log("clicked", btn);
+
+  };
+
+  const tick = () => {
+
+    if (!scheduled) {
+
+      scheduled = true;
+
+      requestAnimationFrame(run);
+
+    }
+
+  };
+
+  const observer = new MutationObserver(tick);
+
+  observer.observe(document.body, { childList: true, subtree: true });
+
+  console.log("successfully injected keno's queue sniper >_<");
+
+  run();
+
+})();`;
 
   return (
     <div className="min-h-screen bg-background wave-bg">
@@ -88,7 +129,7 @@ mode: "aggressive"
           <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
             <Terminal className="w-4 h-4 text-primary-foreground" />
           </div>
-          <Link to="/" className="font-bold text-lg text-foreground">xya's tools</Link>
+          <Link to="/" className="font-bold text-lg text-foreground">keno's tools</Link>
         </div>
 
         <div className="hidden md:flex items-center gap-6">
@@ -124,7 +165,7 @@ mode: "aggressive"
           transition={{ duration: 0.4 }}
           className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/10 text-green-400 text-xs font-semibold mb-6 border border-green-500/20"
         >
-          QUEUE SNIPER V1 IS NOW LIVE!
+          MCTIERS QUEUE SNIPER V1 IS NOW LIVE!
         </motion.div>
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
@@ -132,7 +173,7 @@ mode: "aggressive"
           transition={{ delay: 0.15, duration: 0.5 }}
           className="text-5xl md:text-7xl font-extrabold tracking-tight text-foreground mb-4"
         >
-          Queue Sniper
+          MCTiers Queue Sniper
         </motion.h1>
         <motion.p
           initial={{ opacity: 0, y: 20 }}
@@ -140,7 +181,7 @@ mode: "aggressive"
           transition={{ delay: 0.3, duration: 0.5 }}
           className="text-lg text-muted-foreground max-w-md mx-auto"
         >
-          fast, clean and simple.
+          snipe the MCTiers queue as FAST as you can, easy to setup with tutorial.
         </motion.p>
       </section>
 
@@ -160,9 +201,9 @@ mode: "aggressive"
                 <h2 className="text-2xl font-bold text-foreground">Introduction</h2>
               </div>
               <p className="text-muted-foreground leading-relaxed">
-                the queue sniper lets you target specific players and automatically join their game the moment they queue up. 
-                it works by monitoring the queue system and executing a join at the perfect moment, 
-                with configurable delay and targeting modes.
+                the MCTiers queue sniper automatically clicks the "join queue" button the instant it appears on the page. 
+                it uses a MutationObserver to watch for DOM changes and fires on the next animation frame for maximum speed. 
+                just inject the script and let it do its thing.
               </p>
             </div>
           </TiltCard>
@@ -177,24 +218,24 @@ mode: "aggressive"
                 <h2 className="text-2xl font-bold text-foreground">Setup Tutorial</h2>
               </div>
               <p className="text-muted-foreground mb-6 leading-relaxed">
-                follow these steps to get the queue sniper running. the whole setup takes about 2 minutes.
+                follow these steps to get the queue sniper running. takes less than a minute.
               </p>
               <ol className="space-y-3 text-sm text-muted-foreground">
                 <li className="flex gap-3">
                   <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/20 text-primary text-xs font-bold flex items-center justify-center">1</span>
-                  <span>download the latest release from the releases page</span>
+                  <span>open the MCTiers page in your browser</span>
                 </li>
                 <li className="flex gap-3">
                   <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/20 text-primary text-xs font-bold flex items-center justify-center">2</span>
-                  <span>extract the zip and open the folder</span>
+                  <span>open the browser console with <code className="px-1.5 py-0.5 rounded bg-muted text-foreground text-xs">F12</code> or <code className="px-1.5 py-0.5 rounded bg-muted text-foreground text-xs">Ctrl+Shift+J</code></span>
                 </li>
                 <li className="flex gap-3">
                   <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/20 text-primary text-xs font-bold flex items-center justify-center">3</span>
-                  <span>edit <code className="px-1.5 py-0.5 rounded bg-muted text-foreground text-xs">config.yml</code> with your username and target</span>
+                  <span>copy the code from below and paste it into the console</span>
                 </li>
                 <li className="flex gap-3">
                   <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/20 text-primary text-xs font-bold flex items-center justify-center">4</span>
-                  <span>run <code className="px-1.5 py-0.5 rounded bg-muted text-foreground text-xs">python sniper.py</code> and let it do its thing</span>
+                  <span>press enter and wait, it'll auto-click "join queue" the moment it appears</span>
                 </li>
               </ol>
             </div>
@@ -210,7 +251,7 @@ mode: "aggressive"
                 <h2 className="text-2xl font-bold text-foreground">Configuration</h2>
               </div>
               <p className="text-muted-foreground mb-6 leading-relaxed">
-                here's a sample config to get you started. copy it and adjust the values.
+                copy this code and paste it into your browser console on the MCTiers page.
               </p>
               <div className="relative rounded-xl bg-background border border-border p-4 font-mono text-sm text-muted-foreground overflow-x-auto">
                 <CopyButton text={codeSnippet} />
@@ -223,7 +264,7 @@ mode: "aggressive"
 
       {/* Footer */}
       <footer className="relative z-10 border-t border-border py-8 text-center text-muted-foreground text-sm">
-        © 2025 xya — all rights reserved.
+        © 2025 keno — all rights reserved.
       </footer>
     </div>
   );

@@ -6,8 +6,8 @@ import { motion } from 'framer-motion';
 const tools = [
   {
     icon: Crosshair,
-    title: 'Queue Sniper',
-    desc: 'snipe players in queues with precision. fast, reliable, and easy to set up.',
+    title: 'MCTiers Queue Sniper',
+    desc: 'snipe the MCTiers queue as FAST as you can, easy to setup with tutorial.',
     href: '/queue-sniper',
     tag: 'NEW',
   },
@@ -44,7 +44,7 @@ export default function Landing() {
           <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
             <Terminal className="w-4 h-4 text-primary-foreground" />
           </div>
-          <span className="font-bold text-lg text-foreground">xya's tools</span>
+          <span className="font-bold text-lg text-foreground">keno's tools</span>
         </div>
 
         <div className="hidden md:flex items-center gap-6">
@@ -80,7 +80,7 @@ export default function Landing() {
           transition={{ duration: 0.4 }}
           className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold mb-6 border border-primary/20"
         >
-          XYA'S TOOLS
+          KENO'S TOOLS
         </motion.div>
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
@@ -88,7 +88,7 @@ export default function Landing() {
           transition={{ delay: 0.15, duration: 0.5 }}
           className="text-5xl md:text-7xl font-extrabold tracking-tight text-foreground mb-6 leading-[1.05]"
         >
-          fast, <span className="text-primary">clean</span> and simple.
+          tools created by <span className="text-primary">@wbu5</span>
         </motion.h1>
         <motion.p
           initial={{ opacity: 0, y: 20 }}
@@ -96,7 +96,7 @@ export default function Landing() {
           transition={{ delay: 0.3, duration: 0.5 }}
           className="text-lg text-muted-foreground mb-12 max-w-lg mx-auto leading-relaxed"
         >
-          a collection of tools built by xya. designed to be lightweight, effective, and easy to use.
+          a collection of tools built by keno, designed to be simple fast and effective, easy to use btw :3
         </motion.p>
       </section>
 
@@ -118,7 +118,7 @@ export default function Landing() {
 
       {/* Footer */}
       <footer className="relative z-10 border-t border-border py-8 text-center text-muted-foreground text-sm">
-        © 2025 xya — all rights reserved.
+        © 2025 keno — all rights reserved.
       </footer>
     </div>
   );

@@ -36,7 +36,7 @@ export default function SplashScreen({ onDone }: { onDone: () => void }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.5 }}
           >
-            <span className="text-primary">xya</span>'s tools
+            <span className="text-primary">keno</span>'s tools
           </motion.p>
         </motion.div>
       )}
