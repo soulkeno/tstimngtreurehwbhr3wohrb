@@ -101,7 +101,7 @@ export default function Dashboard() {
 
       <nav className="relative z-10 flex items-center justify-between px-6 py-4 border-b border-border max-w-5xl mx-auto">
         <h2 className="text-xl font-bold text-foreground tracking-tight">
-          xyaaa<span className="text-primary">.lol</span>
+          xya<span className="text-primary">.lol</span>
         </h2>
         <div className="flex items-center gap-3">
           <Button variant="outline" size="sm" asChild className="hover-scale">

@@ -35,7 +35,7 @@ export default function SplashScreen({ onDone }: { onDone: () => void }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.5 }}
           >
-            made by <span className="text-primary">xyaaa</span> w love
+            made by <span className="text-primary">xya</span> w love
           </motion.p>
           <motion.p
             className="text-lg text-primary mt-2"
