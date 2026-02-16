@@ -139,28 +139,31 @@ function TeddyBear({ className }: { className?: string }) {
 }
 
 function FloatingHearts() {
+  const items = ['🧸', '💖', '🎀', '✨', '🌸', '💕', '🧸', '💗', '🎀', '✨', '🌸', '💖', '🧸', '💕', '✨', '🎀', '💖', '🧸'];
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-      {Array.from({ length: 12 }).map((_, i) => (
+      {items.map((emoji, i) => (
         <motion.span
           key={i}
-          className="absolute text-primary/20 select-none"
+          className="absolute select-none"
           style={{
-            left: `${(i * 8.3) % 100}%`,
-            top: `${(i * 13.7) % 100}%`,
-            fontSize: `${16 + (i % 4) * 8}px`,
+            left: `${(i * 5.5) % 98}%`,
+            top: `${(i * 11.3 + 5) % 95}%`,
+            fontSize: `${14 + (i % 5) * 7}px`,
+            opacity: 0.15 + (i % 3) * 0.05,
           }}
           animate={{
-            y: [0, -15, 0],
-            rotate: [0, (i % 2 === 0 ? 10 : -10), 0],
+            y: [0, -20, 0],
+            rotate: [0, (i % 2 === 0 ? 15 : -15), 0],
+            scale: [1, 1.1, 1],
           }}
           transition={{
-            duration: 3 + (i % 3),
+            duration: 3 + (i % 4),
             repeat: Infinity,
-            delay: i * 0.4,
+            delay: i * 0.3,
           }}
         >
-          {i % 3 === 0 ? '🧸' : i % 3 === 1 ? '💖' : '🎀'}
+          {emoji}
         </motion.span>
       ))}
     </div>
