@@ -237,7 +237,7 @@ export default function Landing() {
               <br />
               <WaveText text="Minecraft" />
               <br />
-              <WaveText text="AntiCheat-Tool" />
+              <WaveText text="AntiCheat-Tool :3" />
             </h1>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -245,7 +245,7 @@ export default function Landing() {
               transition={{ delay: 0.6, duration: 0.5 }}
               className="text-lg text-muted-foreground mb-8 max-w-md leading-relaxed"
             >
-              Experience an unparalleled service designed with quality, safety, and speed in mind. Detect cheaters in 60 seconds with advanced forensic analysis.
+              Experience an unparalleled service designed with quality, safety, and speed in mind. Detect cheaters in 60 seconds with advanced forensic analysis :3
             </motion.p>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -327,10 +327,10 @@ export default function Landing() {
         <motion.div className="text-center mb-16" variants={itemVariants}>
           <p className="text-sm font-semibold text-primary mb-2">See why</p>
           <h2 className="text-4xl md:text-5xl font-extrabold text-foreground mb-4">
-            Why Choose Keno Anti-Cheat
+            Why Choose Keno Anti-Cheat :3
           </h2>
           <p className="text-muted-foreground max-w-lg mx-auto">
-            Discover the key features of Keno
+            Discover the key features of Keno 💖
           </p>
         </motion.div>
 
@@ -362,7 +362,7 @@ export default function Landing() {
         <motion.div className="text-center mb-16" variants={itemVariants}>
           <p className="text-sm font-semibold text-primary mb-2">A reliable solution against cheaters</p>
           <h2 className="text-4xl md:text-5xl font-extrabold text-foreground mb-4">
-            Anti-Cheat Solutions
+            Anti-Cheat Solutions :3
           </h2>
           <p className="text-muted-foreground max-w-xl mx-auto">
             An introduction to the basic features and customizable options available with Keno.
@@ -392,7 +392,7 @@ export default function Landing() {
       >
         <motion.div className="text-center mb-16" variants={itemVariants}>
           <h2 className="text-4xl md:text-5xl font-extrabold text-foreground mb-4">
-            How Keno works
+            How Keno works :3
           </h2>
           <p className="text-muted-foreground max-w-xl mx-auto">
             We show you how easy it is to use Keno: in just a few steps, you can download, scan, and get secure results.
