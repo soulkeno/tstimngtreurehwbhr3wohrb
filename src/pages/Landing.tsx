@@ -464,7 +464,7 @@ export default function Landing() {
             Join our Community 💖
           </Button>
         </div>
-        <p className="text-muted-foreground text-sm mt-6">More than <strong className="text-foreground">500+</strong> frequent buyers 🎀</p>
+        <p className="text-muted-foreground text-sm mt-6">join us today 🎀</p>
       </motion.section>
 
       {/* Footer */}
