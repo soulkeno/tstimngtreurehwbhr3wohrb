@@ -223,7 +223,7 @@ export default function QueueSniper() {
               <ol className="space-y-3 text-sm text-muted-foreground">
                 <li className="flex gap-3">
                   <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/20 text-primary text-xs font-bold flex items-center justify-center">1</span>
-                  <span>open the MCTiers page in your browser</span>
+                  <span>open the MCTiers Queue Channel in Discord</span>
                 </li>
                 <li className="flex gap-3">
                   <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/20 text-primary text-xs font-bold flex items-center justify-center">2</span>
