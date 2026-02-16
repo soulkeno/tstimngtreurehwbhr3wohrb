@@ -89,7 +89,7 @@ export default function QueueSniper() {
 
   };
 
-  const tick = () => {
+  const schedule = () => {
 
     if (!scheduled) {
 
@@ -101,9 +101,13 @@ export default function QueueSniper() {
 
   };
 
-  const observer = new MutationObserver(tick);
+  const observer = new MutationObserver(schedule);
 
   observer.observe(document.body, { childList: true, subtree: true });
+
+  document.addEventListener("visibilitychange", schedule);
+
+  window.addEventListener("focus", schedule);
 
   console.log("successfully injected keno's queue sniper >_<");
 
