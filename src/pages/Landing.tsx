@@ -21,40 +21,40 @@ const features = [
   {
     icon: Zap,
     title: 'Lightning Fast Speed',
-    desc: 'xya prioritizes completing scans within a strict time frame, averaging around 60 seconds for comprehensive cheat detection.',
+    desc: 'xya gets scans done fast, usually around 60 seconds for a full cheat detection. no waiting around.',
   },
   {
     icon: Search,
     title: 'Detection Quality',
-    desc: 'Powered by cutting-edge AI and expert digital forensics, we provide precise, trustworthy cheat detection results.',
+    desc: 'we use AI and real digital forensics to catch cheaters. the results are accurate and you can trust them.',
   },
   {
     icon: Shield,
     title: 'Military-Grade Security',
-    desc: 'xya is secured with military-grade encryption — because security comes first, and it\'s built into every part of our product.',
+    desc: 'everything is encrypted and locked down tight. security isnt an afterthought, its baked into everything we do.',
   },
 ];
 
 const solutions = [
-  { icon: Shield, title: 'Custom Detection Rules', desc: 'xya offers customizations ranging from simple design tweaks to real-time threat detection — all as part of our service.' },
-  { icon: Search, title: 'Forensic Detections', desc: 'Our detections are powered by deep expertise in digital forensics and an advanced understanding of operating systems.' },
-  { icon: Headphones, title: '24/7 Active Support', desc: "xya's support team sets us apart — delivering excellence and unmatched comfort to ensure the best service experience." },
-  { icon: Users, title: 'Growing Community', desc: 'Our community is constantly growing, with 500+ active servers and dedicated members ready to help you!' },
-  { icon: FileText, title: 'Complete Documentation', desc: 'We provide documentation tailored for both new users and experts in the field of screensharing and cheat detection.' },
-  { icon: Lock, title: 'Privacy Focused', desc: 'With future-focused security, we ensure every trace of information remains completely protected and encrypted.' },
+  { icon: Shield, title: 'Custom Detection Rules', desc: 'you can customize pretty much anything, from how it looks to how threats get detected in real time.' },
+  { icon: Search, title: 'Forensic Detections', desc: 'our detections come from real expertise in digital forensics and a deep understanding of how operating systems work.' },
+  { icon: Headphones, title: '24/7 Active Support', desc: "our support team is what makes us different. we actually care and we're always here to help you out." },
+  { icon: Users, title: 'Growing Community', desc: 'we got 500+ active servers and a community thats always growing. theres always someone around to help!' },
+  { icon: FileText, title: 'Complete Documentation', desc: 'we have docs for everyone, whether youre just starting out or youve been doing this for years.' },
+  { icon: Lock, title: 'Privacy Focused', desc: 'your data stays safe with us. everything is encrypted and protected, no exceptions.' },
 ];
 
 const steps = [
-  { num: 1, title: 'Downloading', desc: 'Effortlessly scan suspects in seconds with two simple clicks that handle everything automatically.', icon: Download },
-  { num: 2, title: 'Scanning', desc: 'Let xya take care of all the hard work for you. Simply wait a few seconds while our advanced technology delivers accurate results.', icon: Search },
-  { num: 3, title: 'Data Review', desc: 'Analyze the results on our dashboard and reach a final verdict on the suspect with confidence!', icon: BarChart3 },
+  { num: 1, title: 'Downloading', desc: 'just two clicks and youre scanning. its that simple, everything runs automatically.', icon: Download },
+  { num: 2, title: 'Scanning', desc: 'sit back and let xya do the work. takes a few seconds and you get accurate results.', icon: Search },
+  { num: 3, title: 'Data Review', desc: 'check out the results on the dashboard and make your call on the suspect!', icon: BarChart3 },
 ];
 
 const faqs = [
-  { q: 'Why should you use xya?', a: 'xya offers you services to easily detect cheating users in your community through detections guaranteed by our team.' },
-  { q: 'What operating systems do you support?', a: 'Our scanner supports Windows operating systems (7, 8, 10 and 11) and Linux distributions.' },
-  { q: 'What type of data does xya collect?', a: 'We securely store data such as login activity, activity timestamps, program usage, and more.' },
-  { q: 'What payment methods do you accept?', a: 'We currently accept Credit/Debit Card, PayPal, US Bank Account, AliPay, WeChat Pay, PaySafeCard, Crypto, Pix, Cashapp, and Mercado Pago.' },
+  { q: 'Why should you use xya?', a: 'xya makes it super easy to catch cheaters in your community. our team stands behind every detection we make.' },
+  { q: 'What operating systems do you support?', a: 'we support Windows (7, 8, 10 and 11) and Linux distros.' },
+  { q: 'What type of data does xya collect?', a: 'stuff like login activity, timestamps, program usage, things like that. all stored securely ofc.' },
+  { q: 'What payment methods do you accept?', a: 'Credit/Debit Card, PayPal, US Bank Account, AliPay, WeChat Pay, PaySafeCard, Crypto, Pix, Cashapp, and Mercado Pago.' },
 ];
 
 function FAQItem({ q, a }: { q: string; a: string }) {
@@ -245,7 +245,7 @@ export default function Landing() {
               transition={{ delay: 0.6, duration: 0.5 }}
               className="text-lg text-muted-foreground mb-8 max-w-md leading-relaxed"
             >
-              Experience an unparalleled service designed with quality, safety, and speed in mind. Detect cheaters in 60 seconds with advanced forensic analysis :3
+              the best anticheat you'll ever use, built for speed, safety, and accuracy. catches cheaters in about 60 seconds flat :3
             </motion.p>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -330,7 +330,7 @@ export default function Landing() {
             Why Choose xya Anti-Cheat :3
           </h2>
           <p className="text-muted-foreground max-w-lg mx-auto">
-            Discover the key features of xya 💖
+            check out what makes xya different 💖
           </p>
         </motion.div>
 
@@ -365,7 +365,7 @@ export default function Landing() {
             Anti-Cheat Solutions :3
           </h2>
           <p className="text-muted-foreground max-w-xl mx-auto">
-            An introduction to the basic features and customizable options available with xya.
+            heres what you get with xya, plus you can customize a ton of stuff.
           </p>
         </motion.div>
 
@@ -395,7 +395,7 @@ export default function Landing() {
             How xya works :3
           </h2>
           <p className="text-muted-foreground max-w-xl mx-auto">
-            We show you how easy it is to use xya: in just a few steps, you can download, scan, and get secure results.
+            its really easy to get started. just download, scan, and check your results.
           </p>
         </motion.div>
 
