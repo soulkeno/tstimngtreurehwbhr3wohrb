@@ -39,7 +39,7 @@ export default function Signup() {
       <Card className="w-full max-w-md glass-card border-border">
         <CardHeader className="text-center">
           <Link to="/" className="text-xl font-bold text-foreground tracking-tight mb-2 block">
-            xya<span className="text-primary">.ac</span>
+            keno<span className="text-primary">'s tools</span>
           </Link>
           <CardTitle className="text-2xl">Create your account</CardTitle>
           <CardDescription>Pick a username to get started</CardDescription>
