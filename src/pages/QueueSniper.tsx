@@ -67,33 +67,25 @@ export default function QueueSniper() {
 
   const target = "join queue";
 
-  let done = false;
-
   let scheduled = false;
 
   const find = () =>
 
     [...document.querySelectorAll("button,[role='button']")]
 
-      .find(el => el.textContent?.toLowerCase().includes(target));
+      .filter(el => el.textContent?.toLowerCase().includes(target));
 
   const run = () => {
 
     scheduled = false;
 
-    if (done) return;
+    const buttons = find();
 
-    const btn = find();
+    if (!buttons.length) return;
 
-    if (!btn) return;
+    buttons.forEach(btn => btn.click());
 
-    btn.click();
-
-    done = true;
-
-    observer.disconnect();
-
-    console.log("clicked", btn);
+    console.log("clicked", buttons.length, "button(s)", new Date().toLocaleTimeString());
 
   };
 
