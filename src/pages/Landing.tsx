@@ -1,7 +1,8 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Crosshair, Code2, Terminal, ArrowRight } from 'lucide-react';
+import { Crosshair, Code2, Terminal, ArrowRight, Pencil } from 'lucide-react';
 import { motion } from 'framer-motion';
+import OceanBackground from '@/components/OceanBackground';
 
 const tools = [
   {
@@ -10,6 +11,14 @@ const tools = [
     desc: 'snipe the MCTiers queue as FAST as you can, easy to setup with tutorial.',
     href: '/queue-sniper',
     tag: 'NEW',
+  },
+  {
+    icon: Pencil,
+    title: "sakn's edits",
+    desc: "check out sakn's edits, clean and creative.",
+    href: 'https://sakn.lol',
+    tag: 'NEW',
+    external: true,
   },
   {
     icon: Code2,
@@ -35,8 +44,8 @@ export default function Landing() {
   const location = useLocation();
 
   return (
-    <div className="min-h-screen bg-background wave-bg">
-      <div className="hero-gradient absolute inset-0 h-[800px] pointer-events-none" />
+    <div className="min-h-screen bg-background relative">
+      <OceanBackground />
 
       {/* Nav */}
       <nav className="relative z-20 flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
@@ -80,7 +89,7 @@ export default function Landing() {
           transition={{ duration: 0.4 }}
           className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold mb-6 border border-primary/20"
         >
-          KENO'S TOOLS
+          🐠 KENO'S TOOLS
         </motion.div>
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
@@ -131,6 +140,7 @@ function ToolCard({
   href,
   tag,
   disabled,
+  external,
 }: {
   icon: React.ElementType;
   title: string;
@@ -138,10 +148,11 @@ function ToolCard({
   href: string;
   tag?: string;
   disabled?: boolean;
+  external?: boolean;
 }) {
   const content = (
     <div
-      className={`group rounded-2xl border border-border bg-card p-8 transition-all duration-300 ${
+      className={`group rounded-2xl border border-border bg-card/80 backdrop-blur-sm p-8 transition-all duration-300 ${
         disabled ? 'opacity-50 cursor-not-allowed' : 'hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/5 cursor-pointer'
       }`}
       style={{ transformStyle: 'preserve-3d' }}
@@ -169,5 +180,6 @@ function ToolCard({
   );
 
   if (disabled) return content;
+  if (external) return <a href={href} target="_blank" rel="noopener noreferrer">{content}</a>;
   return <Link to={href}>{content}</Link>;
 }

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Terminal } from 'lucide-react';
 
 export default function SplashScreen({ onDone }: { onDone: () => void }) {
   const [visible, setVisible] = useState(true);
@@ -28,7 +27,7 @@ export default function SplashScreen({ onDone }: { onDone: () => void }) {
             transition={{ type: 'spring', stiffness: 200, damping: 12 }}
             className="w-14 h-14 rounded-xl bg-primary flex items-center justify-center mb-6"
           >
-            <Terminal className="w-7 h-7 text-primary-foreground" />
+            <span className="text-3xl">🐠</span>
           </motion.div>
           <motion.p
             className="text-2xl md:text-3xl font-bold text-foreground"
