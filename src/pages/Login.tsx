@@ -31,7 +31,7 @@ export default function Login() {
       <Card className="w-full max-w-md glass-card border-border">
         <CardHeader className="text-center">
           <Link to="/" className="text-xl font-bold text-foreground tracking-tight mb-2 block">
-            keno<span className="text-primary">.ac</span>
+            xyaaa<span className="text-primary">.ac</span>
           </Link>
           <CardTitle className="text-2xl">Welcome back</CardTitle>
           <CardDescription>Sign in to your anticheat dashboard</CardDescription>
