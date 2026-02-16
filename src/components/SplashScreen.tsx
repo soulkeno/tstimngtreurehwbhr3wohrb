@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Terminal } from 'lucide-react';
 
 export default function SplashScreen({ onDone }: { onDone: () => void }) {
   const [visible, setVisible] = useState(true);
@@ -8,7 +9,7 @@ export default function SplashScreen({ onDone }: { onDone: () => void }) {
     const timer = setTimeout(() => {
       setVisible(false);
       setTimeout(onDone, 600);
-    }, 2400);
+    }, 2000);
     return () => clearTimeout(timer);
   }, [onDone]);
 
@@ -21,47 +22,22 @@ export default function SplashScreen({ onDone }: { onDone: () => void }) {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <motion.span
-            className="text-6xl mb-6"
+          <motion.div
             initial={{ scale: 0, rotate: -20 }}
             animate={{ scale: 1, rotate: 0 }}
             transition={{ type: 'spring', stiffness: 200, damping: 12 }}
+            className="w-14 h-14 rounded-xl bg-primary flex items-center justify-center mb-6"
           >
-            🧸
-          </motion.span>
+            <Terminal className="w-7 h-7 text-primary-foreground" />
+          </motion.div>
           <motion.p
             className="text-2xl md:text-3xl font-bold text-foreground"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.5 }}
           >
-            made by <span className="text-primary">xya</span> w love
+            <span className="text-primary">xya</span>'s tools
           </motion.p>
-          <motion.p
-            className="text-lg text-primary mt-2"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8, duration: 0.4 }}
-          >
-            :3
-          </motion.p>
-          <motion.div
-            className="flex gap-2 mt-6"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.2, duration: 0.4 }}
-          >
-            {['💖', '🎀', '✨', '🌸', '💕'].map((e, i) => (
-              <motion.span
-                key={i}
-                animate={{ y: [0, -8, 0] }}
-                transition={{ duration: 1.2, repeat: Infinity, delay: i * 0.15 }}
-                className="text-xl"
-              >
-                {e}
-              </motion.span>
-            ))}
-          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
