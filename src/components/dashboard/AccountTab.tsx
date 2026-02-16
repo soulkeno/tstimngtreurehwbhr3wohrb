@@ -74,7 +74,7 @@ export function AccountTab({ profile, onUpdate }: Props) {
         <div className="space-y-2">
           <Label>Username (URL)</Label>
           <div className="flex items-center gap-2">
-            <span className="text-muted-foreground text-sm whitespace-nowrap">kenos.lol/</span>
+            <span className="text-muted-foreground text-sm whitespace-nowrap">xyaaa.lol/</span>
             <Input value={username} onChange={(e) => setUsername(e.target.value.toLowerCase())} maxLength={30} className="bg-secondary border-border" />
           </div>
         </div>

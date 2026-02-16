@@ -21,7 +21,7 @@ const features = [
   {
     icon: Zap,
     title: 'Lightning Fast Speed',
-    desc: 'Keno prioritizes completing scans within a strict time frame, averaging around 60 seconds for comprehensive cheat detection.',
+    desc: 'xyaaa prioritizes completing scans within a strict time frame, averaging around 60 seconds for comprehensive cheat detection.',
   },
   {
     icon: Search,
@@ -31,14 +31,14 @@ const features = [
   {
     icon: Shield,
     title: 'Military-Grade Security',
-    desc: 'Keno is secured with military-grade encryption — because security comes first, and it\'s built into every part of our product.',
+    desc: 'xyaaa is secured with military-grade encryption — because security comes first, and it\'s built into every part of our product.',
   },
 ];
 
 const solutions = [
-  { icon: Shield, title: 'Custom Detection Rules', desc: 'Keno offers customizations ranging from simple design tweaks to real-time threat detection — all as part of our service.' },
+  { icon: Shield, title: 'Custom Detection Rules', desc: 'xyaaa offers customizations ranging from simple design tweaks to real-time threat detection — all as part of our service.' },
   { icon: Search, title: 'Forensic Detections', desc: 'Our detections are powered by deep expertise in digital forensics and an advanced understanding of operating systems.' },
-  { icon: Headphones, title: '24/7 Active Support', desc: "Keno's support team sets us apart — delivering excellence and unmatched comfort to ensure the best service experience." },
+  { icon: Headphones, title: '24/7 Active Support', desc: "xyaaa's support team sets us apart — delivering excellence and unmatched comfort to ensure the best service experience." },
   { icon: Users, title: 'Growing Community', desc: 'Our community is constantly growing, with 500+ active servers and dedicated members ready to help you!' },
   { icon: FileText, title: 'Complete Documentation', desc: 'We provide documentation tailored for both new users and experts in the field of screensharing and cheat detection.' },
   { icon: Lock, title: 'Privacy Focused', desc: 'With future-focused security, we ensure every trace of information remains completely protected and encrypted.' },
@@ -46,14 +46,14 @@ const solutions = [
 
 const steps = [
   { num: 1, title: 'Downloading', desc: 'Effortlessly scan suspects in seconds with two simple clicks that handle everything automatically.', icon: Download },
-  { num: 2, title: 'Scanning', desc: 'Let Keno take care of all the hard work for you. Simply wait a few seconds while our advanced technology delivers accurate results.', icon: Search },
+  { num: 2, title: 'Scanning', desc: 'Let xyaaa take care of all the hard work for you. Simply wait a few seconds while our advanced technology delivers accurate results.', icon: Search },
   { num: 3, title: 'Data Review', desc: 'Analyze the results on our dashboard and reach a final verdict on the suspect with confidence!', icon: BarChart3 },
 ];
 
 const faqs = [
-  { q: 'Why should you use Keno?', a: 'Keno offers you services to easily detect cheating users in your community through detections guaranteed by our team.' },
+  { q: 'Why should you use xyaaa?', a: 'xyaaa offers you services to easily detect cheating users in your community through detections guaranteed by our team.' },
   { q: 'What operating systems do you support?', a: 'Our scanner supports Windows operating systems (7, 8, 10 and 11) and Linux distributions.' },
-  { q: 'What type of data does Keno collect?', a: 'We securely store data such as login activity, activity timestamps, program usage, and more.' },
+  { q: 'What type of data does xyaaa collect?', a: 'We securely store data such as login activity, activity timestamps, program usage, and more.' },
   { q: 'What payment methods do you accept?', a: 'We currently accept Credit/Debit Card, PayPal, US Bank Account, AliPay, WeChat Pay, PaySafeCard, Crypto, Pix, Cashapp, and Mercado Pago.' },
 ];
 
@@ -193,7 +193,7 @@ export default function Landing() {
           <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
             <Heart className="w-4 h-4 text-primary-foreground" fill="currentColor" />
           </div>
-          <span className="font-bold text-lg text-foreground">keno</span>
+          <span className="font-bold text-lg text-foreground">xyaaa</span>
           <span className="text-xs ml-1">🎀</span>
         </div>
 
@@ -254,7 +254,7 @@ export default function Landing() {
             >
               <Button size="lg" className="text-base px-8 py-6 gap-2 rounded-none btn-press">
                 <Play className="w-4 h-4" fill="currentColor" />
-                Start Keno
+                Start xyaaa
               </Button>
             </motion.div>
           </div>
@@ -279,7 +279,7 @@ export default function Landing() {
                 <div className="space-y-1">
                   <div className="flex items-center gap-2 mb-4">
                     <div className="w-6 h-6 rounded bg-primary/20" />
-                    <span className="text-xs font-semibold text-foreground">Keno</span>
+                    <span className="text-xs font-semibold text-foreground">xyaaa</span>
                   </div>
                   {['Home', 'Detected Cheaters', 'Scan History', 'Configs'].map((item, i) => (
                     <div key={item} className={`text-xs px-3 py-2 rounded-lg ${i === 0 ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground'}`}>
@@ -294,7 +294,7 @@ export default function Landing() {
                 <div className="space-y-4">
                   <div>
                     <p className="text-xs text-muted-foreground mb-1">Welcome Back,</p>
-                    <p className="text-lg font-bold text-foreground">keno</p>
+                    <p className="text-lg font-bold text-foreground">xyaaa</p>
                   </div>
                   <div className="rounded-xl bg-muted/50 border border-border p-4 h-32 flex items-end">
                     <div className="flex items-end gap-2 w-full">
@@ -327,10 +327,10 @@ export default function Landing() {
         <motion.div className="text-center mb-16" variants={itemVariants}>
           <p className="text-sm font-semibold text-primary mb-2">See why</p>
           <h2 className="text-4xl md:text-5xl font-extrabold text-foreground mb-4">
-            Why Choose Keno Anti-Cheat :3
+            Why Choose xyaaa Anti-Cheat :3
           </h2>
           <p className="text-muted-foreground max-w-lg mx-auto">
-            Discover the key features of Keno 💖
+            Discover the key features of xyaaa 💖
           </p>
         </motion.div>
 
@@ -365,7 +365,7 @@ export default function Landing() {
             Anti-Cheat Solutions :3
           </h2>
           <p className="text-muted-foreground max-w-xl mx-auto">
-            An introduction to the basic features and customizable options available with Keno.
+            An introduction to the basic features and customizable options available with xyaaa.
           </p>
         </motion.div>
 
@@ -392,10 +392,10 @@ export default function Landing() {
       >
         <motion.div className="text-center mb-16" variants={itemVariants}>
           <h2 className="text-4xl md:text-5xl font-extrabold text-foreground mb-4">
-            How Keno works :3
+            How xyaaa works :3
           </h2>
           <p className="text-muted-foreground max-w-xl mx-auto">
-            We show you how easy it is to use Keno: in just a few steps, you can download, scan, and get secure results.
+            We show you how easy it is to use xyaaa: in just a few steps, you can download, scan, and get secure results.
           </p>
         </motion.div>
 
@@ -469,7 +469,7 @@ export default function Landing() {
 
       {/* Footer */}
       <footer className="relative z-10 border-t border-border py-8 text-center text-muted-foreground text-sm">
-        © 2025 Keno — All rights reserved. 💖🧸
+        © 2025 xyaaa — All rights reserved. 💖🧸
       </footer>
     </div>
   );

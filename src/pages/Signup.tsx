@@ -39,7 +39,7 @@ export default function Signup() {
       <Card className="w-full max-w-md glass-card border-border">
         <CardHeader className="text-center">
           <Link to="/" className="text-xl font-bold text-foreground tracking-tight mb-2 block">
-            keno<span className="text-primary">.ac</span>
+            xyaaa<span className="text-primary">.ac</span>
           </Link>
           <CardTitle className="text-2xl">Create your account</CardTitle>
           <CardDescription>Pick a username to get started</CardDescription>
@@ -49,7 +49,7 @@ export default function Signup() {
             <div className="space-y-2">
               <Label htmlFor="username">Username</Label>
               <div className="flex items-center gap-2">
-                <span className="text-muted-foreground text-sm whitespace-nowrap">kenos.lol/</span>
+                <span className="text-muted-foreground text-sm whitespace-nowrap">xyaaa.lol/</span>
                 <Input
                   id="username"
                   placeholder="username"
