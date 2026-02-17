@@ -51,6 +51,24 @@ const faqs = [
   { q: 'will there be more tools?', a: 'absolutely. new tools are actively being developed and will be released regularly.' },
 ];
 
+const codeShowcase = `{
+  "tool": "queue-sniper",
+  "version": "1.0",
+  "config": {
+    "target": "join queue",
+    "method": "MutationObserver",
+    "speed": "requestAnimationFrame",
+    "auto_click": true
+  },
+  "status": "active",
+  "created_by": "@wbu5",
+  "features": [
+    "instant detection",
+    "auto-click",
+    "zero delay"
+  ]
+}`;
+
 /* ========== MESH GRADIENT BG ========== */
 function MeshBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -63,10 +81,7 @@ function MeshBackground() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
+    const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
     resize();
     window.addEventListener('resize', resize);
 
@@ -81,7 +96,6 @@ function MeshBackground() {
       time.current += 1;
       ctx.fillStyle = 'hsl(260, 20%, 5%)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-
       blobs.forEach(b => {
         const cx = canvas.width * (b.x + 0.1 * Math.sin(time.current * b.speed + b.phase));
         const cy = canvas.height * (b.y + 0.1 * Math.cos(time.current * b.speed * 1.3 + b.phase));
@@ -91,15 +105,11 @@ function MeshBackground() {
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
       });
-
       animRef.current = requestAnimationFrame(draw);
     };
     draw();
 
-    return () => {
-      cancelAnimationFrame(animRef.current);
-      window.removeEventListener('resize', resize);
-    };
+    return () => { cancelAnimationFrame(animRef.current); window.removeEventListener('resize', resize); };
   }, []);
 
   return <canvas ref={canvasRef} className="fixed inset-0 z-0" />;
@@ -125,7 +135,7 @@ function WavyText({ text, className, delay = 0 }: { text: string; className?: st
   );
 }
 
-/* ========== REVEAL WRAPPER ========== */
+/* ========== REVEAL ========== */
 function Reveal({ children, className, delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
   return (
     <motion.div
@@ -140,35 +150,70 @@ function Reveal({ children, className, delay = 0 }: { children: React.ReactNode;
   );
 }
 
-/* ========== TOOL CARD ========== */
-function ToolCard({ icon: Icon, title, desc, href, tag, disabled, external }: typeof tools[number]) {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const rotateX = useSpring(useMotionValue(0), { stiffness: 200, damping: 20 });
-  const rotateY = useSpring(useMotionValue(0), { stiffness: 200, damping: 20 });
+/* ========== GLOW CARD (with cursor glow + tilt + scale) ========== */
+function GlowCard({ children, className, disabled }: { children: React.ReactNode; className?: string; disabled?: boolean }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [glowPos, setGlowPos] = useState({ x: 0, y: 0 });
+  const [hovering, setHovering] = useState(false);
+  const rotateX = useSpring(0, { stiffness: 200, damping: 20 });
+  const rotateY = useSpring(0, { stiffness: 200, damping: 20 });
 
   const handleMove = (e: React.MouseEvent) => {
+    if (disabled) return;
     const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
     const px = (e.clientX - rect.left) / rect.width - 0.5;
     const py = (e.clientY - rect.top) / rect.height - 0.5;
-    rotateX.set(py * -8);
-    rotateY.set(px * 8);
+    rotateX.set(py * -14);
+    rotateY.set(px * 14);
+    setGlowPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
   };
-  const handleLeave = () => { rotateX.set(0); rotateY.set(0); };
 
-  const inner = (
+  const handleLeave = () => {
+    rotateX.set(0);
+    rotateY.set(0);
+    setHovering(false);
+  };
+
+  return (
     <motion.div
+      ref={ref}
       style={{ rotateX, rotateY, transformPerspective: 800 }}
       onMouseMove={handleMove}
+      onMouseEnter={() => !disabled && setHovering(true)}
       onMouseLeave={handleLeave}
-      className={`group relative h-full border border-border/40 bg-card/20 backdrop-blur-md overflow-hidden transition-colors duration-500 ${disabled ? 'opacity-30 cursor-not-allowed' : 'hover:border-primary/50 cursor-pointer'}`}
+      whileHover={disabled ? {} : { scale: 1.04 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+      className={`relative overflow-hidden ${className}`}
+    >
+      {/* cursor glow */}
+      {hovering && (
+        <div
+          className="pointer-events-none absolute z-0 w-[300px] h-[300px] rounded-full transition-opacity duration-300"
+          style={{
+            left: glowPos.x - 150,
+            top: glowPos.y - 150,
+            background: 'radial-gradient(circle, hsla(265, 80%, 65%, 0.15) 0%, transparent 70%)',
+          }}
+        />
+      )}
+      {children}
+    </motion.div>
+  );
+}
+
+/* ========== TOOL CARD ========== */
+function ToolCard({ icon: Icon, title, desc, href, tag, disabled, external }: typeof tools[number]) {
+  const inner = (
+    <GlowCard
+      disabled={disabled}
+      className={`h-full border border-border/40 bg-card/20 backdrop-blur-md transition-colors duration-500 ${disabled ? 'opacity-30 cursor-not-allowed' : 'hover:border-primary/50 cursor-pointer'}`}
     >
       {/* shimmer top line */}
-      <div className="absolute top-0 inset-x-0 h-px">
+      <div className="absolute top-0 inset-x-0 h-px z-10">
         <div className="h-full w-1/2 mx-auto bg-gradient-to-r from-transparent via-primary/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
       </div>
 
-      <div className="p-8 relative z-10">
+      <div className="p-8 relative z-10 group">
         <div className="flex items-start justify-between mb-8">
           <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center group-hover:bg-primary/20 group-hover:border-primary/40 group-hover:shadow-[0_0_30px_hsl(265,80%,65%,0.15)] transition-all duration-500">
             <Icon className="w-6 h-6 text-primary/70 group-hover:text-primary transition-colors duration-300" />
@@ -189,7 +234,7 @@ function ToolCard({ icon: Icon, title, desc, href, tag, disabled, external }: ty
           </div>
         )}
       </div>
-    </motion.div>
+    </GlowCard>
   );
 
   if (disabled) return inner;
@@ -198,14 +243,11 @@ function ToolCard({ icon: Icon, title, desc, href, tag, disabled, external }: ty
 }
 
 /* ========== FAQ ========== */
-function FaqItem({ q, a, index }: { q: string; a: string; index: number }) {
+function FaqItem({ q, a }: { q: string; a: string; index: number }) {
   const [open, setOpen] = useState(false);
   return (
     <div className="border-b border-border/20 last:border-b-0">
-      <button
-        onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between py-6 text-left group"
-      >
+      <button onClick={() => setOpen(!open)} className="w-full flex items-center justify-between py-6 text-left group">
         <span className="text-sm font-medium text-foreground/80 group-hover:text-foreground transition-colors">{q}</span>
         <motion.div animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.3 }}>
           <ChevronDown className="w-4 h-4 text-muted-foreground" />
@@ -213,18 +255,59 @@ function FaqItem({ q, a, index }: { q: string; a: string; index: number }) {
       </button>
       <AnimatePresence>
         {open && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="overflow-hidden"
-          >
+          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.3 }} className="overflow-hidden">
             <p className="text-sm text-muted-foreground leading-relaxed pb-6">{a}</p>
           </motion.div>
         )}
       </AnimatePresence>
     </div>
+  );
+}
+
+/* ========== CODE SHOWCASE (tilted) ========== */
+function CodeShowcase() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: 80, rotateY: -15 }}
+      animate={{ opacity: 1, x: 0, rotateY: -8 }}
+      transition={{ delay: 0.8, duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+      className="relative hidden lg:block"
+      style={{ perspective: 1200 }}
+    >
+      <div
+        className="relative w-[480px] rounded-2xl border border-border/30 bg-card/40 backdrop-blur-xl shadow-2xl shadow-primary/10 overflow-hidden"
+        style={{ transform: 'rotateY(-6deg) rotateX(2deg)' }}
+      >
+        {/* window bar */}
+        <div className="flex items-center gap-2 px-4 py-3 border-b border-border/20 bg-card/60">
+          <div className="w-3 h-3 rounded-full bg-destructive/60" />
+          <div className="w-3 h-3 rounded-full bg-yellow-500/60" />
+          <div className="w-3 h-3 rounded-full bg-green-500/60" />
+          <span className="ml-3 text-[10px] text-muted-foreground font-mono">config.json</span>
+        </div>
+        {/* code */}
+        <div className="p-5 font-mono text-[11px] leading-relaxed text-muted-foreground overflow-hidden max-h-[360px]">
+          <pre className="whitespace-pre-wrap">
+            {codeShowcase.split('\n').map((line, i) => (
+              <div key={i} className="flex">
+                <span className="w-6 text-right mr-4 text-muted-foreground/30 select-none text-[10px]">{i + 1}</span>
+                <span>
+                  {line.replace(/"([^"]+)":/g, (_, k) => `"${k}":`).split(/(["'][^"']*["']|true|false|null|\d+)/g).map((part, j) => {
+                    if (/^["']/.test(part) && part.includes(':')) return <span key={j} className="text-primary/80">{part}</span>;
+                    if (/^["']/.test(part)) return <span key={j} className="text-green-400/70">{part}</span>;
+                    if (/^(true|false|null)$/.test(part)) return <span key={j} className="text-yellow-400/70">{part}</span>;
+                    if (/^\d+$/.test(part)) return <span key={j} className="text-orange-400/70">{part}</span>;
+                    return <span key={j}>{part}</span>;
+                  })}
+                </span>
+              </div>
+            ))}
+          </pre>
+        </div>
+        {/* glow */}
+        <div className="absolute -bottom-20 -right-20 w-[200px] h-[200px] bg-primary/10 blur-[80px] rounded-full pointer-events-none" />
+      </div>
+    </motion.div>
   );
 }
 
@@ -251,13 +334,11 @@ export default function Landing() {
             </div>
             <span className="font-bold text-sm text-foreground tracking-tight">keno's tools</span>
           </Link>
-
           <div className="hidden md:flex items-center gap-8">
             {['tools', 'features', 'faq'].map(s => (
               <a key={s} href={`#${s}`} className="text-xs text-muted-foreground hover:text-foreground transition-colors tracking-wide capitalize">{s}</a>
             ))}
           </div>
-
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="sm" className="text-xs h-8 text-muted-foreground" asChild>
               <Link to="/login">login</Link>
@@ -270,72 +351,64 @@ export default function Landing() {
       </motion.nav>
 
       {/* ===== HERO ===== */}
-      <section className="relative z-10 min-h-screen flex flex-col items-center justify-center px-6 text-center">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="mb-8"
-        >
-          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/15 text-primary text-[11px] font-medium tracking-wide">
-            <Sparkles className="w-3.5 h-3.5" />
-            free & open tools
-          </span>
-        </motion.div>
+      <section className="relative z-10 min-h-screen flex items-center px-6 md:px-10">
+        <div className="max-w-7xl mx-auto w-full flex items-center justify-between gap-16">
+          {/* left: text */}
+          <div className="flex-1 max-w-xl">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="mb-6"
+            >
+              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/15 text-primary text-[11px] font-medium tracking-wide">
+                <Sparkles className="w-3.5 h-3.5" />
+                free & open tools
+              </span>
+            </motion.div>
 
-        <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter text-foreground leading-[0.85]">
-          <WavyText text="pick ur" delay={0.3} />
-        </h1>
-        <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[0.85] mt-1">
-          <WavyText text="tool" className="text-primary" delay={0.65} />
-        </h1>
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter text-foreground leading-[0.85]">
+              <WavyText text="pick ur" delay={0.3} />
+            </h1>
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.85] mt-1">
+              <WavyText text="tool" className="text-primary" delay={0.65} />
+            </h1>
 
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2, duration: 0.8 }}
-          className="mt-8 text-muted-foreground text-sm md:text-base max-w-md leading-relaxed"
-        >
-          fast, simple, free tools by <span className="text-foreground">@wbu5</span>
-        </motion.p>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.2, duration: 0.8 }}
+              className="mt-8 text-muted-foreground text-sm md:text-base max-w-md leading-relaxed"
+            >
+              tools made by <span className="text-foreground font-medium">@wbu5</span>, fast, simple, and free.
+            </motion.p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.5, duration: 0.6 }}
-          className="mt-10 flex gap-4"
-        >
-          <a
-            href="#tools"
-            className="group inline-flex items-center gap-2.5 px-8 py-3.5 bg-primary text-primary-foreground text-sm font-semibold rounded-lg shadow-xl shadow-primary/25 hover:shadow-primary/40 hover:brightness-110 transition-all duration-300 active:scale-[0.97]"
-          >
-            explore
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-          </a>
-        </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.5, duration: 0.6 }}
+              className="mt-8 flex gap-4"
+            >
+              <a
+                href="#tools"
+                className="group inline-flex items-center gap-2.5 px-8 py-3.5 bg-primary text-primary-foreground text-sm font-semibold rounded-lg shadow-xl shadow-primary/25 hover:shadow-primary/40 hover:brightness-110 transition-all duration-300 active:scale-[0.97]"
+              >
+                explore
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+              </a>
+            </motion.div>
+          </div>
 
-        {/* scroll indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 2.5, duration: 1 }}
-          className="absolute bottom-12"
-        >
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
-            className="w-5 h-9 rounded-full border-2 border-muted-foreground/20 flex items-start justify-center p-1.5"
-          >
-            <div className="w-1 h-2 rounded-full bg-muted-foreground/40" />
-          </motion.div>
-        </motion.div>
+          {/* right: tilted code showcase */}
+          <CodeShowcase />
+        </div>
       </section>
 
       {/* ===== TOOLS ===== */}
       <section id="tools" className="relative z-10 max-w-5xl mx-auto px-6 py-32">
-        <Reveal className="mb-16 text-center">
-          <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-primary/70 mb-4 block">tools</span>
-          <h2 className="text-4xl md:text-6xl font-black text-foreground tracking-tight">
+        <Reveal className="text-center mb-16">
+          <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-primary/70 block mb-3">tools</span>
+          <h2 className="text-3xl md:text-5xl font-black text-foreground tracking-tight">
             what we've <span className="text-primary">got</span>
           </h2>
         </Reveal>
@@ -351,9 +424,9 @@ export default function Landing() {
 
       {/* ===== FEATURES ===== */}
       <section id="features" className="relative z-10 max-w-5xl mx-auto px-6 py-32">
-        <Reveal className="mb-16 text-center">
-          <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-primary/70 mb-4 block">why us</span>
-          <h2 className="text-4xl md:text-6xl font-black text-foreground tracking-tight">
+        <Reveal className="text-center mb-16">
+          <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-primary/70 block mb-3">why us</span>
+          <h2 className="text-3xl md:text-5xl font-black text-foreground tracking-tight">
             built <span className="text-primary">right</span>
           </h2>
         </Reveal>
@@ -361,13 +434,15 @@ export default function Landing() {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
           {features.map((f, i) => (
             <Reveal key={f.title} delay={i * 0.06}>
-              <div className="group p-7 rounded-xl border border-border/20 bg-card/10 backdrop-blur-sm hover:bg-card/30 hover:border-primary/20 transition-all duration-500">
-                <div className="w-11 h-11 rounded-xl bg-primary/10 border border-primary/15 flex items-center justify-center mb-5 group-hover:bg-primary/15 group-hover:shadow-[0_0_20px_hsl(265,80%,65%,0.1)] transition-all duration-500">
-                  <f.icon className="w-5 h-5 text-primary/60 group-hover:text-primary transition-colors duration-300" />
+              <GlowCard className="h-full border border-border/20 bg-card/10 backdrop-blur-sm hover:border-primary/20 transition-colors duration-500 rounded-xl cursor-default">
+                <div className="p-7 relative z-10 group">
+                  <div className="w-11 h-11 rounded-xl bg-primary/10 border border-primary/15 flex items-center justify-center mb-5 group-hover:bg-primary/15 group-hover:shadow-[0_0_20px_hsl(265,80%,65%,0.1)] transition-all duration-500">
+                    <f.icon className="w-5 h-5 text-primary/60 group-hover:text-primary transition-colors duration-300" />
+                  </div>
+                  <h3 className="text-sm font-bold text-foreground mb-1.5">{f.title}</h3>
+                  <p className="text-xs text-muted-foreground leading-relaxed">{f.desc}</p>
                 </div>
-                <h3 className="text-sm font-bold text-foreground mb-1.5">{f.title}</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">{f.desc}</p>
-              </div>
+              </GlowCard>
             </Reveal>
           ))}
         </div>
@@ -375,9 +450,9 @@ export default function Landing() {
 
       {/* ===== FAQ ===== */}
       <section id="faq" className="relative z-10 max-w-2xl mx-auto px-6 py-32">
-        <Reveal className="mb-12 text-center">
-          <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-primary/70 mb-4 block">faq</span>
-          <h2 className="text-4xl md:text-6xl font-black text-foreground tracking-tight">
+        <Reveal className="text-center mb-12">
+          <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-primary/70 block mb-3">faq</span>
+          <h2 className="text-3xl md:text-5xl font-black text-foreground tracking-tight">
             questions<span className="text-primary">?</span>
           </h2>
         </Reveal>

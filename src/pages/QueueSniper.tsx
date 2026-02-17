@@ -4,6 +4,47 @@ import { Terminal, Info, Code2, Play, Copy, Check, ArrowLeft, Sparkles } from 'l
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 import { useRef, useCallback, useState, useEffect } from 'react';
 
+/* ========== GLOW CARD (cursor glow + tilt + scale) ========== */
+function GlowCard({ children, className }: { children: React.ReactNode; className?: string }) {
+  const [glowPos, setGlowPos] = useState({ x: 0, y: 0 });
+  const [hovering, setHovering] = useState(false);
+  const rotateX = useSpring(0, { stiffness: 200, damping: 20 });
+  const rotateY = useSpring(0, { stiffness: 200, damping: 20 });
+
+  const handleMove = (e: React.MouseEvent) => {
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width - 0.5;
+    const py = (e.clientY - rect.top) / rect.height - 0.5;
+    rotateX.set(py * -12);
+    rotateY.set(px * 12);
+    setGlowPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+  };
+
+  return (
+    <motion.div
+      style={{ rotateX, rotateY, transformPerspective: 800 }}
+      onMouseMove={handleMove}
+      onMouseEnter={() => setHovering(true)}
+      onMouseLeave={() => { rotateX.set(0); rotateY.set(0); setHovering(false); }}
+      whileHover={{ scale: 1.02 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+      className={`relative overflow-hidden ${className}`}
+    >
+      {hovering && (
+        <div
+          className="pointer-events-none absolute z-0 w-[300px] h-[300px] rounded-full"
+          style={{
+            left: glowPos.x - 150,
+            top: glowPos.y - 150,
+            background: 'radial-gradient(circle, hsla(265, 80%, 65%, 0.15) 0%, transparent 70%)',
+          }}
+        />
+      )}
+      {children}
+    </motion.div>
+  );
+}
+
 /* ========== PARTICLE FIELD ========== */
 function ParticleField() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -297,12 +338,12 @@ export default function QueueSniper() {
       >
         {/* Introduction */}
         <motion.div variants={fadeUp}>
-          <div className="group relative bg-card/30 backdrop-blur-sm border border-border/30 p-8 hover:border-primary/30 transition-all duration-500 overflow-hidden">
+          <GlowCard className="bg-card/30 backdrop-blur-sm border border-border/30 hover:border-primary/30 transition-all duration-500">
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/0 to-transparent group-hover:via-primary/60 transition-all duration-700" />
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <div className="relative z-10">
+            <div className="relative z-10 p-8">
               <div className="flex items-center gap-3 mb-5">
-                <div className="w-10 h-10 border border-border/50 flex items-center justify-center group-hover:border-primary/30 group-hover:bg-primary/5 transition-all duration-300">
+                <div className="w-10 h-10 border border-border/50 rounded-xl flex items-center justify-center group-hover:border-primary/30 group-hover:bg-primary/5 transition-all duration-300">
                   <Info className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors duration-300" />
                 </div>
                 <h2 className="text-xl font-bold text-foreground">Introduction</h2>
@@ -313,18 +354,16 @@ export default function QueueSniper() {
                 just inject the script and let it do its thing.
               </p>
             </div>
-          </div>
+          </GlowCard>
         </motion.div>
 
         {/* Setup Tutorial */}
         <motion.div variants={fadeUp}>
-          <div className="group relative bg-card/30 backdrop-blur-sm border border-border/30 p-8 hover:border-primary/30 transition-all duration-500 overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/0 to-transparent group-hover:via-green-500/60 transition-all duration-700" />
-            <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <div className="relative z-10">
+          <GlowCard className="bg-card/30 backdrop-blur-sm border border-border/30 hover:border-primary/30 transition-all duration-500">
+            <div className="relative z-10 p-8">
               <div className="flex items-center gap-3 mb-5">
-                <div className="w-10 h-10 border border-border/50 flex items-center justify-center group-hover:border-green-500/30 group-hover:bg-green-500/5 transition-all duration-300">
-                  <Play className="w-4 h-4 text-muted-foreground group-hover:text-green-400 transition-colors duration-300" />
+                <div className="w-10 h-10 border border-border/50 rounded-xl flex items-center justify-center">
+                  <Play className="w-4 h-4 text-muted-foreground" />
                 </div>
                 <h2 className="text-xl font-bold text-foreground">Setup Tutorial</h2>
               </div>
@@ -339,7 +378,7 @@ export default function QueueSniper() {
                   'press enter and wait, it\'ll auto-click "join queue" the moment it appears',
                 ].map((step, i) => (
                   <li key={i} className="flex gap-4 items-start">
-                    <span className="flex-shrink-0 w-7 h-7 border border-primary/30 bg-primary/5 text-primary text-xs font-bold flex items-center justify-center">
+                    <span className="flex-shrink-0 w-7 h-7 border border-primary/30 bg-primary/5 text-primary text-xs font-bold flex items-center justify-center rounded-lg">
                       {i + 1}
                     </span>
                     <span className="pt-0.5">{step}</span>
@@ -347,30 +386,28 @@ export default function QueueSniper() {
                 ))}
               </ol>
             </div>
-          </div>
+          </GlowCard>
         </motion.div>
 
         {/* Code */}
         <motion.div variants={fadeUp}>
-          <div className="group relative bg-card/30 backdrop-blur-sm border border-border/30 p-8 hover:border-primary/30 transition-all duration-500 overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/0 to-transparent group-hover:via-primary/60 transition-all duration-700" />
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <div className="relative z-10">
+          <GlowCard className="bg-card/30 backdrop-blur-sm border border-border/30 hover:border-primary/30 transition-all duration-500">
+            <div className="relative z-10 p-8">
               <div className="flex items-center gap-3 mb-5">
-                <div className="w-10 h-10 border border-border/50 flex items-center justify-center group-hover:border-primary/30 group-hover:bg-primary/5 transition-all duration-300">
-                  <Code2 className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors duration-300" />
+                <div className="w-10 h-10 border border-border/50 rounded-xl flex items-center justify-center">
+                  <Code2 className="w-4 h-4 text-muted-foreground" />
                 </div>
                 <h2 className="text-xl font-bold text-foreground">Configuration</h2>
               </div>
               <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
                 copy this code and paste it into your browser console on the MCTiers page.
               </p>
-              <div className="relative bg-background/80 border border-border/50 p-5 font-mono text-sm text-muted-foreground overflow-x-auto hover:border-primary/20 transition-colors duration-300">
+              <div className="relative bg-background/80 border border-border/50 p-5 font-mono text-sm text-muted-foreground overflow-x-auto hover:border-primary/20 transition-colors duration-300 rounded-xl">
                 <CopyButton text={codeSnippet} />
                 <pre className="whitespace-pre-wrap text-xs leading-relaxed">{codeSnippet}</pre>
               </div>
             </div>
-          </div>
+          </GlowCard>
         </motion.div>
       </motion.section>
 
