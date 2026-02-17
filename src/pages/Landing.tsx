@@ -69,7 +69,7 @@ const fadeUp = {
 function ParticleField() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouse = useRef({ x: -1000, y: -1000 });
-  const particles = useRef<{ x: number; y: number; vx: number; vy: number; size: number; alpha: number }[]>([]);
+  const particles = useRef<{ x: number; y: number; vx: number; vy: number; size: number; alpha: number; pulse: number; pulseSpeed: number }[]>([]);
   const animRef = useRef<number>(0);
 
   useEffect(() => {
@@ -84,15 +84,16 @@ function ParticleField() {
     };
     resize();
 
-    // init particles
-    const count = Math.min(80, Math.floor(window.innerWidth / 20));
+    const count = Math.min(120, Math.floor(window.innerWidth / 14));
     particles.current = Array.from({ length: count }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      vx: (Math.random() - 0.5) * 0.3,
-      vy: (Math.random() - 0.5) * 0.3,
-      size: Math.random() * 2 + 0.5,
-      alpha: Math.random() * 0.5 + 0.1,
+      vx: (Math.random() - 0.5) * 0.4,
+      vy: (Math.random() - 0.5) * 0.4,
+      size: Math.random() * 2.5 + 0.5,
+      alpha: Math.random() * 0.6 + 0.1,
+      pulse: Math.random() * Math.PI * 2,
+      pulseSpeed: 0.01 + Math.random() * 0.02,
     }));
 
     const onMove = (e: MouseEvent) => {
@@ -106,45 +107,59 @@ function ParticleField() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       particles.current.forEach((p) => {
-        // mouse repulsion
         const dx = p.x - mouse.current.x;
         const dy = p.y - mouse.current.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 120) {
-          const force = (120 - dist) / 120;
-          p.vx += (dx / dist) * force * 0.15;
-          p.vy += (dy / dist) * force * 0.15;
+        
+        if (dist < 150) {
+          const force = (150 - dist) / 150;
+          p.vx += (dx / dist) * force * 0.2;
+          p.vy += (dy / dist) * force * 0.2;
         }
 
         p.x += p.vx;
         p.y += p.vy;
-        p.vx *= 0.99;
-        p.vy *= 0.99;
+        p.vx *= 0.985;
+        p.vy *= 0.985;
+        p.pulse += p.pulseSpeed;
 
-        // wrap
         if (p.x < 0) p.x = canvas.width;
         if (p.x > canvas.width) p.x = 0;
         if (p.y < 0) p.y = canvas.height;
         if (p.y > canvas.height) p.y = 0;
 
+        const pulseAlpha = p.alpha * (0.6 + 0.4 * Math.sin(p.pulse));
+        const glowSize = dist < 150 ? p.size * (1 + (150 - dist) / 150) : p.size;
+
+        // outer glow
+        const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, glowSize * 4);
+        gradient.addColorStop(0, `hsla(265, 80%, 65%, ${pulseAlpha * 0.3})`);
+        gradient.addColorStop(1, `hsla(265, 80%, 65%, 0)`);
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(265, 80%, 65%, ${p.alpha})`;
+        ctx.arc(p.x, p.y, glowSize * 4, 0, Math.PI * 2);
+        ctx.fillStyle = gradient;
+        ctx.fill();
+
+        // core
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, glowSize, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(265, 80%, 75%, ${pulseAlpha})`;
         ctx.fill();
       });
 
-      // draw connections
+      // connections with glow
       particles.current.forEach((a, i) => {
         particles.current.slice(i + 1).forEach((b) => {
           const dx = a.x - b.x;
           const dy = a.y - b.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 150) {
+          if (dist < 160) {
+            const opacity = 0.12 * (1 - dist / 160);
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b.x, b.y);
-            ctx.strokeStyle = `hsla(265, 80%, 65%, ${0.08 * (1 - dist / 150)})`;
-            ctx.lineWidth = 0.5;
+            ctx.strokeStyle = `hsla(265, 80%, 65%, ${opacity})`;
+            ctx.lineWidth = 0.8;
             ctx.stroke();
           }
         });
@@ -437,20 +452,6 @@ export default function Landing() {
         </motion.div>
       </section>
 
-      {/* ===== STATS BAR ===== */}
-      <section className="relative z-10 max-w-6xl mx-auto px-6 pb-20">
-        <motion.div
-          variants={stagger}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.5 }}
-          className="grid grid-cols-3 border border-border/40 bg-card/20 backdrop-blur-sm divide-x divide-border/40 py-8"
-        >
-          <StatNumber value="3+" label="Tools" />
-          <StatNumber value="100%" label="Free" />
-          <StatNumber value="24/7" label="Available" />
-        </motion.div>
-      </section>
 
       {/* ===== TOOLS ===== */}
       <section id="tools" className="relative z-10 max-w-6xl mx-auto px-6 py-28">
@@ -464,7 +465,7 @@ export default function Landing() {
             <span className="text-[10px] font-bold tracking-[0.25em] uppercase text-primary">Available Tools</span>
           </motion.div>
           <motion.h2 variants={fadeUp} className="text-3xl md:text-5xl font-black text-foreground tracking-tight mb-3">
-            pick your <span className="text-primary">weapon</span>
+            pick ur <span className="text-primary">tool</span>
           </motion.h2>
           <motion.p variants={fadeUp} className="text-sm text-muted-foreground max-w-md">choose from the collection and get started instantly.</motion.p>
         </motion.div>
@@ -588,7 +589,7 @@ export default function Landing() {
             </div>
             <span className="text-xs text-muted-foreground">keno's tools</span>
           </div>
-          <span className="text-[11px] text-muted-foreground/50">© 2025 keno — all rights reserved.</span>
+          <span className="text-[11px] text-muted-foreground/50">keno's tools made by @wbu5</span>
         </div>
       </footer>
     </div>
