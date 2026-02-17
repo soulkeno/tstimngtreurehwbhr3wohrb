@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Terminal, Info, Code2, Play, Copy, Check } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useRef, useCallback, useState } from 'react';
-import OceanBackground from '@/components/OceanBackground';
+
 
 const containerVariants = {
   hidden: {},
@@ -118,7 +118,7 @@ export default function QueueSniper() {
 
   return (
     <div className="min-h-screen bg-background relative">
-      <OceanBackground />
+      
 
       {/* Nav */}
       <nav className="relative z-20 flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
